@@ -4,7 +4,21 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -17,6 +31,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  private Field2d m_field = new Field2d();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,6 +57,25 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // //**** START LimeLight Dashboard *****
+    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    // NetworkTableEntry tx = table.getEntry("tx");
+    // NetworkTableEntry ty = table.getEntry("ty");
+    // NetworkTableEntry ta = table.getEntry("ta");
+    
+    // //read values periodically
+    // double x = tx.getDouble(0.0);
+    // double y = ty.getDouble(0.0);
+    // double area = ta.getDouble(0.0);
+
+    // //post to smart dashboard periodically
+    // SmartDashboard.putNumber("LimelightX", x);
+    // SmartDashboard.putNumber("LimelightY", y);
+    // SmartDashboard.putNumber("LimelightArea", area);
+
+    // //***** END LimeLight Dashboard ****
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -93,9 +127,31 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    SmartDashboard.putData("Field", m_field);
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  @Override
+  public void robotInit(){
+    // Create the trajectory to follow in autonomous. It is best to initialize
+    // trajectories here to avoid wasting time in autonomous.
+    Trajectory m_trajectory =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+            new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+
+    // Create and push Field2d to SmartDashboard.
+    m_field = new Field2d();
+    SmartDashboard.putData(m_field);
+
+    // Push the trajectory to Field2d.
+
+    m_field.getObject("traj").setTrajectory(m_trajectory);
+  }
 }
