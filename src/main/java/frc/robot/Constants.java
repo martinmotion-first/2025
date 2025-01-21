@@ -7,7 +7,6 @@ package frc.robot;
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.configs.*;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,7 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.lib.PIDGains;
+import frc.lib.PIDGainsArm;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -235,7 +234,7 @@ import frc.lib.util.SwerveModuleConstants;
       // ~76.9deg angle)
       public static final ArmFeedforward kArmFeedforward =
           new ArmFeedforward(0.0, 3.0, 12.0 / kArmFreeSpeed, 0.0);
-      public static final PIDGains kArmPositionGains = new PIDGains(2.5, 0.0, 0.0);
+      public static final PIDGainsArm kArmPositionGains = new PIDGainsArm(2.5, 0.0, 0.0);
       public static final TrapezoidProfile.Constraints kArmMotionConstraint =
           new TrapezoidProfile.Constraints(1.0, 2.0);
 
@@ -249,7 +248,7 @@ public static final class Intake {
   public static final boolean kMotorInverted = true;
   public static final int kCurrentLimit = 80;
 
-  public static final PIDGains kPositionGains = new PIDGains(1.0, 0.0, 0.0);
+  public static final PIDGainsArm kPositionGains = new PIDGainsArm(1.0, 0.0, 0.0);
   public static final double kPositionTolerance = 0.5;
 
   public static final double kIntakePower = 0.7;
