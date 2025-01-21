@@ -38,7 +38,7 @@ import edu.wpi.first.net.PortForwarder;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  public static CTREConfigs ctreConfigs;
+  public static CTREConfigs ctreConfigs = new CTREConfigs();
 
   private final RobotContainer m_robotContainer;
   private Field2d m_field = new Field2d();
