@@ -22,6 +22,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+//REF: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
+//ORIG from limelight documentation about event prep
+// import edu.wpi.first.wpiutil.net.PortForwarder;
+//END ORIG
+//MODDED from limelight documentation about event prep to 2025 library that exists
+import edu.wpi.first.net.PortForwarder;
+//END MODDED from limelight documentation about event prep to 2025 library that exists
+
+
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
@@ -29,9 +38,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  public static CTREConfigs ctreConfigs;
 
   private final RobotContainer m_robotContainer;
   private Field2d m_field = new Field2d();
+  //MODDED
+  // NetworkTable m_networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+  //END MODDED
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -59,12 +72,22 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     // //**** START LimeLight Dashboard *****
-    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // //MODDED
+    // NetworkTableEntry tx = m_networkTable.getEntry("tx");
+    // NetworkTableEntry ty = m_networkTable.getEntry("ty");
+    // NetworkTableEntry ta = m_networkTable.getEntry("ta");
+    // //END MODDED
 
+    // //ORIG
+    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // //END ORIG
+
+    // //ORIG
     // NetworkTableEntry tx = table.getEntry("tx");
     // NetworkTableEntry ty = table.getEntry("ty");
     // NetworkTableEntry ta = table.getEntry("ta");
-    
+    // //END ORIG
+
     // //read values periodically
     // double x = tx.getDouble(0.0);
     // double y = ty.getDouble(0.0);
@@ -137,14 +160,26 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit(){
+    double xOffset = 3;
+    double yOffset = 3;
+
+    double maxVelocity = Units.feetToMeters(3.0);
+    double maxAcceleration = Units.feetToMeters(3.0);
     // Create the trajectory to follow in autonomous. It is best to initialize
     // trajectories here to avoid wasting time in autonomous.
     Trajectory m_trajectory =
         TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-            new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+            new Pose2d(0 + xOffset, 0 + yOffset, Rotation2d.fromDegrees(0)),
+            List.of(new Translation2d(1 + xOffset, 1 + yOffset), new Translation2d(2 + xOffset, -1 + yOffset)),
+            new Pose2d(3 + xOffset, 0 + yOffset, Rotation2d.fromDegrees(0)),
+            new TrajectoryConfig(maxVelocity, maxAcceleration));
+
+    // Trajectory m_trajectoryOrig =
+    //   TrajectoryGenerator.generateTrajectory(
+    //       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+    //       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+    //       new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+    //       new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
 
     // Create and push Field2d to SmartDashboard.
     m_field = new Field2d();
@@ -153,5 +188,16 @@ public class Robot extends TimedRobot {
     // Push the trajectory to Field2d.
 
     m_field.getObject("traj").setTrajectory(m_trajectory);
+    // m_field.getObject("trajOrig").setTrajectory(m_trajectoryOrig);
+
+      //ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
+      // Make sure you only configure port forwarding once in your robot code.
+      // Do not place these function calls in any periodic functions
+      for (int port = 5800; port <= 5809; port++) {
+        PortForwarder.add(port, "limelight.local", port);
+      }
+      //END ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
+
   }
+
 }
