@@ -4,43 +4,124 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autos;
-import frc.robot.controllers.DriverMapping6237MR;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
+import java.io.IOException;
+import java.util.function.Supplier;
+
+import org.json.simple.parser.ParseException;
+import org.littletonrobotics.urcl.URCL;
+
+import com.techhounds.houndutil.houndauto.AutoManager;
+import com.techhounds.houndutil.houndlog.LoggingManager;
+import com.techhounds.houndutil.houndlog.annotations.Log;
+import com.techhounds.houndutil.houndlog.annotations.SendableLog;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
+
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SwerveSubsystem s_Swerve = new SwerveSubsystem();
+    @SendableLog
+    private Mechanism2d mechanisms = new Mechanism2d(5, 3);
+    private MechanismRoot2d root = mechanisms.getRoot("root", 2.5, 0.25);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController driver = new XboxController(Constants.kXboxDriverPort);
+    @SuppressWarnings("unused")
+    private MechanismLigament2d fromRobot = root
+            .append(new MechanismLigament2d("fromRobot", Units.inchesToMeters(5.5), 180, 0,
+                    new Color8Bit(Color.kWhite)));
+    @SuppressWarnings("unused")
+    private MechanismLigament2d elevatorBase = root
+            .append(new MechanismLigament2d("elevatorBase", Units.inchesToMeters(36), 90, 2,
+                    new Color8Bit(Color.kWhite)));
+    private MechanismLigament2d elevatorLigament = root
+            .append(new MechanismLigament2d("elevatorStage", Units.inchesToMeters(10), 90,
+                    4,
+                    new Color8Bit(Color.kOrange)));
+    private MechanismLigament2d armLigament = elevatorLigament
+            .append(new MechanismLigament2d("armLigament", Units.inchesToMeters(10), 270,
+                    5,
+                    new Color8Bit(Color.kRed)));
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureButtonBindings();
-  }
+    PositionTracker positionTracker = new PositionTracker();
 
-  private void configureButtonBindings() {
-    DriverMapping6237MR.mapXboxController(driver, s_Swerve);
-  }
+    @Log
+    Drivetrain drivetrain = new Drivetrain();
+    @Log
+    Elevator elevator = new Elevator(positionTracker, elevatorLigament);
+    @Log
+    Arm arm = new Arm(positionTracker, armLigament, elevator::getCarriageComponentPose);
+    @Log
+    Intake intake = new Intake();
+    @Log
+    Climber climber = new Climber();
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+    @Log
+    CoralSim coralSim = new CoralSim(drivetrain::getPose, arm::getClawComponentPose);
+
+    @Log
+    LEDs leds = new LEDs();
+
+    @Log
+    HoundBrian houndbrian = new HoundBrian(drivetrain, elevator, arm, climber, leds);
+
+    @Log
+    private final Supplier<Boolean> initialized = GlobalStates.INITIALIZED::enabled;
+
+    @SendableLog
+    CommandScheduler scheduler = CommandScheduler.getInstance();
+
+    @Log(groups = "gamePieces")
+    public Pose3d getCoralPose() {
+        Pose3d relativeCoralPose = arm.getClawComponentPose().plus(new Transform3d(0.143, 0, 0, new Rotation3d()));
+        return new Pose3d(drivetrain.getPose())
+                .plus(new Transform3d(relativeCoralPose.getTranslation(), relativeCoralPose.getRotation()))
+                .plus(new Transform3d(0, 0, 0, new Rotation3d(0, Math.PI / 2.0, 0)));
+    }
+
+    public RobotContainer() {
+        configureBindings();
+        try {
+            configureAuto();
+        } catch (IOException | ParseException e) {
+            throw new RuntimeException(e);
+        }
+        LoggingManager.getInstance().registerObject(this);
+        URCL.start();
+
+        new Trigger(() -> {
+            return elevator.getInitialized()
+                    && arm.getInitialized()
+                    && climber.getInitialized();
+        }).onTrue(GlobalStates.INITIALIZED.enableCommand());
+
+        new Trigger(DriverStation::isEnabled)
+                .onTrue(Commands.parallel(
+                        elevator.resetControllersCommand(),
+                        arm.resetControllersCommand()).withName("resetControllers"));
+    }
+
+    private void configureBindings() {
+        Controls.configureControls(0, drivetrain, elevator, arm, intake, climber, coralSim);
+        Controls.configureTestingControls(1, drivetrain, elevator, arm, intake, climber, leds);
+    }
+
+    public void configureAuto() throws IOException, ParseException {
+        AutoManager.getInstance().addRoutine(Autos.testPath(drivetrain));
+        AutoManager.getInstance().addRoutine(Autos.GDC(drivetrain, elevator, arm, coralSim));
+    }
 }

@@ -1,8 +1,72 @@
-# 2025
-Starting WPIlib code for Command-based robot 2025
+
+
+
+# Including information from the rusthounds 2025 setup (who originally authored the code we are modifying)
+# These steps are necessary to add and pull in the hountutil subproject/module
+# Note: I did the top part a little differently and needed to clone the houndutil repo (https://github.com/frc868/houndutil) 
+#   into the subfolder rather than adding the submodule via command line. Then I needed to run gradlew.bat on the subproject
+#   to resolve that error before the top level would attempt to include and build it properly
+
+# 2025-Ri3D
+Robot code for the 2025 RustHOUNDS Ri3D robot.
+
+# houndutil
+
+[![CI](https://github.com/frc868/houndutil/actions/workflows/main.yml/badge.svg)](https://github.com/frc868/houndutil/actions/workflows/main.yml)
+
+A utility library for TechHOUNDS. Includes houndlog, houndauto, and houndlib.
+
+# Mandatory git configuration for projects
+```
+git config --global submodules.recurse true
+```
+
+## How to add this to other projects
+
+Open your robot project, and open a terminal in its folder. Run:
+
+```sh
+git submodule add https://github.com/frc868/houndutil
+```
+
+This will clone and add the houndutil submodule to your repository.
+
+Now, edit `build.gradle` and `settings.gradle`.
+
+In `build.gradle`, add:
+
+```gradle
+implementation project(":houndutil")
+```
+
+in the `dependencies` block. It should look like this:
+
+```gradle
+dependencies {
+    implementation project(":houndutil")
+
+    implementation wpi.java.deps.wpilib()
+    implementation wpi.java.vendor.java()
+
+    ...
+}
+```
+
+In `settings.gradle`, add these lines at the end of the file:
+
+```gradle
+include ':houndutil'
+rootProject.children[0].buildFileName = "submodule.gradle"
+```
+
+Now, import `houndutil` items by using:
+
+```java
+import com.techhounds.houndutil.houndlog.LoggingManager;
+```
+
 
 # Pulling in old readme information for the swerve drive calibration information that has proven invaluable - credit (and thanks!) to Team364 for this original info that continues to be passed down...
-
 **Note: In 2023, there was an [issue](https://github.com/Team364/BaseFalconSwerve/issues/8) that prevented this code from working with MK4i's (or any module that used inverted motors). A [fix](https://github.com/Team364/BaseFalconSwerve/issues/8#issuecomment-1384799539) has been found, tested on a real robot, and this issue is believed to have been fixed as of 1/17. If anyone experiences any further issues, please report them. Thanks**
 
 # BaseFalconSwerve </br>
