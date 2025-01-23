@@ -7,6 +7,7 @@ package frc.robot;
 // import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 // import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public final class CTREConfigs {
     // public TalonFXConfiguration swerveAngleFXConfig;
@@ -76,7 +77,11 @@ public final class CTREConfigs {
         // swerveCanCoderConfig.sensorDirection = Constants.Swerve.canCoderInvert;
         // swerveCanCoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         // swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
+        MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
+        sensorConfigs.AbsoluteSensorDiscontinuityPoint = 1;
+        sensorConfigs.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
-        // NOTE! There is no equivalent sensor information on the CANCoderConfiguration object in Phoenix6
+        swerveCanCoderConfigs.withMagnetSensor(sensorConfigs);
+        // NOTE! This is as close as I could get to a phoenix6 version of the sensor config
     }
 }

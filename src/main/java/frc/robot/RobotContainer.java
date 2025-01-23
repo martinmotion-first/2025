@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.DriverMapping6237MR;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -28,6 +29,17 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureButtonBindings();
+  
+    s_Swerve.setDefaultCommand(
+      new TeleopSwerve(
+          s_Swerve, 
+          () -> -driver.getRawAxis(DriverMapping6237MR.translationAxis), 
+          () -> -driver.getRawAxis(DriverMapping6237MR.strafeAxis), 
+          () -> -driver.getRawAxis(DriverMapping6237MR.rotationAxis), 
+          () -> DriverMapping6237MR.robotCentric.getAsBoolean(),
+          () -> DriverMapping6237MR.invertFrontAndBackButton.getAsBoolean()
+      )
+    );
   }
 
   private void configureButtonBindings() {
