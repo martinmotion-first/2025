@@ -45,6 +45,7 @@ public class TeleopSwerve extends Command {
             
         }
 
+        //HERE!!! open loop true?
         /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 

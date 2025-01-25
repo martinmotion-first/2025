@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.math.Conversions;
-import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
 
 // import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -14,6 +13,9 @@ import frc.lib.util.SwerveModuleConstants;
 // import com.ctre.phoenix.sensors.CANCoder;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import static edu.wpi.first.units.Units.Degrees;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -52,7 +54,8 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
-        desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
+        //HERE!!! - I do not trust this is working as intended anymore, so removing for our initial tests
+        // desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
@@ -72,19 +75,22 @@ public class SwerveModule {
 
     private void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        //HERE!!!
         // mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
         mAngleMotor.setControl(new PositionDutyCycle(angle.getMeasure()));
         lastAngle = angle;
     }
 
     private Rotation2d getAngle(){
+        //HERE!!!
         // return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio));
-        return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getPosition().getValueAsDouble(), Constants.Swerve.angleGearRatio));
+        return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getPosition().getValue().in(Degrees), Constants.Swerve.angleGearRatio));
     }
 
     public Rotation2d getCanCoder(){
+        //HERE!!!
         // return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
-        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValueAsDouble());
+        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValue().in(Degrees));
     }
 
     public void resetToAbsolute(){
@@ -104,12 +110,12 @@ public class SwerveModule {
         // mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
         // mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         // mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
-        mAngleMotor.getConfigurator().apply(Robot.ctreConfigs.swerveAngleConfigs);
+        //HERE!
         MotorOutputConfigs motorOutput = new MotorOutputConfigs();
         motorOutput.Inverted = Constants.Swerve.angleMotorInvert;
         motorOutput.NeutralMode = Constants.Swerve.angleNeutralMode;
         Robot.ctreConfigs.swerveAngleConfigs.MotorOutput = motorOutput; 
-        mAngleMotor.getConfigurator().apply(motorOutput);
+        mAngleMotor.getConfigurator().apply(Robot.ctreConfigs.swerveAngleConfigs);
         resetToAbsolute();
     }
 
@@ -119,12 +125,12 @@ public class SwerveModule {
         // mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
         // mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
         // mDriveMotor.setSelectedSensorPosition(0);
-        mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveConfigs);
+        //HERE!!!
         MotorOutputConfigs motorOutput = new MotorOutputConfigs();
         motorOutput.Inverted = Constants.Swerve.driveMotorInvert;
         motorOutput.NeutralMode = Constants.Swerve.driveNeutralMode;
         Robot.ctreConfigs.swerveAngleConfigs.MotorOutput = motorOutput; 
-        mDriveMotor.getConfigurator().apply(motorOutput);
+        mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveConfigs);
     }
 
     public SwerveModuleState getState(){

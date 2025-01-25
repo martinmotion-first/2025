@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 // import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -134,7 +136,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValueAsDouble()) : Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
+        //HERE!!!
+        // return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValueAsDouble()) : Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
+        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValue().in(Degrees)) : Rotation2d.fromDegrees(gyro.getYaw().getValue().in(Degrees));
     }
 
     public void resetModulesToAbsolute(){

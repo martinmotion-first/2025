@@ -30,6 +30,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureButtonBindings();
   
+    //HERE!!! - this probably could be or should be moved to the teleop init
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
           s_Swerve, 

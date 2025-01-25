@@ -41,7 +41,8 @@ public final class CTREConfigs {
         swerveAngleConfigs.Slot0.kP = Constants.Swerve.angleKP;
         swerveAngleConfigs.Slot0.kI = Constants.Swerve.angleKI;
         swerveAngleConfigs.Slot0.kD = Constants.Swerve.angleKD;
-        swerveAngleConfigs.Slot0.kV = Constants.Swerve.angleKF;  //NOTE! kV is not the same as kF but is the closest equivalent as far as I can tell...
+        //HERE!!!
+        // swerveAngleConfigs.Slot0.kV = Constants.Swerve.angleKF;  //NOTE! kV is not the same as kF but is the closest equivalent as far as I can tell...
         swerveAngleConfigs.withCurrentLimits(angleSupplyLimit); 
 
         /* Swerve Drive Motor Configuration */
@@ -62,7 +63,8 @@ public final class CTREConfigs {
         swerveDriveConfigs.Slot0.kP = Constants.Swerve.driveKP;
         swerveDriveConfigs.Slot0.kI = Constants.Swerve.driveKI;
         swerveDriveConfigs.Slot0.kD = Constants.Swerve.driveKD;
-        swerveDriveConfigs.Slot0.kV = Constants.Swerve.driveKF;   //NOTE! kV is not the same as kF but is the closest equivalent as far as I can tell...
+        //HERE!!!
+        // swerveDriveConfigs.Slot0.kV = Constants.Swerve.driveKF;   //NOTE! kV is not the same as kF but is the closest equivalent as far as I can tell...
         // swerveDriveConfig.supplyCurrLimit = driveSupplyLimit;
         swerveDriveConfigs.withCurrentLimits(driveSupplyLimit);
         // swerveDriveConfig.openloopRamp = Constants.Swerve.openLoopRamp;
