@@ -6,6 +6,9 @@ package frc.robot;
 
 import java.util.List;
 
+import com.ctre.phoenix6.Orchestra;
+import com.ctre.phoenix6.hardware.ParentDevice;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -128,6 +131,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_robotContainer.fromRobotInit();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -159,6 +163,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit(){
+
     //HERE!!! - commenting out robotinit for angle testing. Shouldn't interfere, but preventing unnecessary processing...
     
     // double xOffset = 3;

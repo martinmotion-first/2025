@@ -9,9 +9,11 @@ import frc.robot.controllers.DriverMapping6237MR;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -19,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 //HERE!!! BLOCK IMPORTED FROM PHOENIX GENERATED SWERVE
 import static edu.wpi.first.units.Units.*;
+
+import java.nio.file.FileSystem;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -108,6 +112,13 @@ public class RobotContainer {
         // drivetrain.registerTelemetry(logger::telemeterize);
 
     //HERE!!! END BLOCK IMPORTED FROM PHOENIX GENERATED SWERVE
+  }
+
+  public void fromRobotInit(){
+    Orchestra theOrchestra = new Orchestra();
+    theOrchestra.addInstrument(drivetrain.getAMotorAsParentDevice());
+    theOrchestra.loadMusic(Filesystem.getDeployDirectory().getAbsolutePath() + "/output.chrp");
+    theOrchestra.play();
   }
 
   /**
