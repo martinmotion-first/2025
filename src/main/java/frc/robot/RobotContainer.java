@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -63,9 +64,21 @@ public class RobotContainer {
   public RobotContainer() {
       autoChooser = AutoBuilder.buildAutoChooser("3m straight with 90degree rotation");
       SmartDashboard.putData("Auto Mode", autoChooser);
+      SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
+      SmartDashboard.putData("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder());
+      SmartDashboard.putData("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder());
+      SmartDashboard.putData("drivetrain module 2 (back-left) encoder", drivetrain.getModule(2).getEncoder());
+      SmartDashboard.putData("drivetrain module 3 (back-right) encoder", drivetrain.getModule(3).getEncoder());
+      SmartDashboard.putData("Steer motor module 0 (front-left)", drivetrain.getModule(0).getSteerMotor());
+      SmartDashboard.putData("Steer motor module 1 (front-right)", drivetrain.getModule(1).getSteerMotor());
+      SmartDashboard.putData("Steer motor module 2 (back-left)", drivetrain.getModule(2).getSteerMotor());
+      SmartDashboard.putData("Steer motor module 3 (back-right)", drivetrain.getModule(3).getSteerMotor());
+      SmartDashboard.putData("Drive motor module 0 (front-left)", drivetrain.getModule(0).getDriveMotor());
+      SmartDashboard.putData("Drive motor module 1 (front-right)", drivetrain.getModule(1).getDriveMotor());
+      SmartDashboard.putData("Drive motor module 2 (back-left)", drivetrain.getModule(2).getDriveMotor());
+      SmartDashboard.putData("Drive motor module 3 (back-right)", drivetrain.getModule(3).getDriveMotor());
     // Configure the trigger bindings
     configureButtonBindings();
-  
     //HERE!!! - this probably could be or should be moved to the teleop init
     // s_Swerve.setDefaultCommand(
     //   new TeleopSwerve(
@@ -122,5 +135,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+  
+  public void getSimPeriodic(Field2d field) {
+    field.setRobotPose(drivetrain.getState().Pose);
   }
 }
