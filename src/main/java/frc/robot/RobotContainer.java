@@ -65,10 +65,10 @@ public class RobotContainer {
       autoChooser = AutoBuilder.buildAutoChooser("3m straight with 90degree rotation");
       SmartDashboard.putData("Auto Mode", autoChooser);
       SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
-      SmartDashboard.putData("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder());
-      SmartDashboard.putData("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder());
-      SmartDashboard.putData("drivetrain module 2 (back-left) encoder", drivetrain.getModule(2).getEncoder());
-      SmartDashboard.putData("drivetrain module 3 (back-right) encoder", drivetrain.getModule(3).getEncoder());
+      SmartDashboard.putNumber("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putNumber("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putNumber("drivetrain module 2 (back-left) encoder", drivetrain.getModule(2).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putNumber("drivetrain module 3 (back-right) encoder", drivetrain.getModule(3).getEncoder().getAbsolutePosition().getValueAsDouble());
       SmartDashboard.putData("Steer motor module 0 (front-left)", drivetrain.getModule(0).getSteerMotor());
       SmartDashboard.putData("Steer motor module 1 (front-right)", drivetrain.getModule(1).getSteerMotor());
       SmartDashboard.putData("Steer motor module 2 (back-left)", drivetrain.getModule(2).getSteerMotor());
