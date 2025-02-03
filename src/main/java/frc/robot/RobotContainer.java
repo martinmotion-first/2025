@@ -7,12 +7,17 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.controllers.DriverMapping6237MR;
 import frc.robot.generated.TunerConstants;
+import frc.robot.limelightlib.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -31,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import edu.wpi.first.wpilibj.Timer;
  //HERE!!! END BLOCK IMPORTED FROM PHOENIX GENERATED SWERVE
 
 
@@ -46,10 +52,10 @@ public class RobotContainer {
     //moving to Contants
     // private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     // private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
-
-
-
+    
+    
+    private final SendableChooser<Command> autoChooser;
+    
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     //HERE!!! END BLOCK IMPORTED FROM PHOENIX GENERATED SWERVE
 
@@ -58,9 +64,23 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+      autoChooser = AutoBuilder.buildAutoChooser("3m straight with 90degree rotation");
+      SmartDashboard.putData("Auto Mode", autoChooser);
+      SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
+      SmartDashboard.putNumber("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putNumber("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putNumber("drivetrain module 2 (back-left) encoder", drivetrain.getModule(2).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putNumber("drivetrain module 3 (back-right) encoder", drivetrain.getModule(3).getEncoder().getAbsolutePosition().getValueAsDouble());
+      SmartDashboard.putData("Steer motor module 0 (front-left)", drivetrain.getModule(0).getSteerMotor());
+      SmartDashboard.putData("Steer motor module 1 (front-right)", drivetrain.getModule(1).getSteerMotor());
+      SmartDashboard.putData("Steer motor module 2 (back-left)", drivetrain.getModule(2).getSteerMotor());
+      SmartDashboard.putData("Steer motor module 3 (back-right)", drivetrain.getModule(3).getSteerMotor());
+      SmartDashboard.putData("Drive motor module 0 (front-left)", drivetrain.getModule(0).getDriveMotor());
+      SmartDashboard.putData("Drive motor module 1 (front-right)", drivetrain.getModule(1).getDriveMotor());
+      SmartDashboard.putData("Drive motor module 2 (back-left)", drivetrain.getModule(2).getDriveMotor());
+      SmartDashboard.putData("Drive motor module 3 (back-right)", drivetrain.getModule(3).getDriveMotor());
     // Configure the trigger bindings
     configureButtonBindings();
-  
     //HERE!!! - this probably could be or should be moved to the teleop init
     // s_Swerve.setDefaultCommand(
     //   new TeleopSwerve(
@@ -116,6 +136,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
+  }
+  
+  public void getSimPeriodic(Field2d field) {
+    field.setRobotPose(drivetrain.getState().Pose);
+  }
+
+  public void getAutoPeriodic(Timer timer) {
+    // drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(Constants.kLimelightName), Timer.getMatchTime());
   }
 }

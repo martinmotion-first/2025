@@ -21,13 +21,15 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import frc.robot.limelightlib.LimelightHelpers;
+import frc.robot.limelightlib.LimelightHelpers.LimelightResults;
 //REF: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
 //ORIG from limelight documentation about event prep
 // import edu.wpi.first.wpiutil.net.PortForwarder;
 //END ORIG
 //MODDED from limelight documentation about event prep to 2025 library that exists
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.Timer;
 //END MODDED from limelight documentation about event prep to 2025 library that exists
 
 
@@ -42,7 +44,8 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
   private Field2d m_field = new Field2d();
   //MODDED
-  // NetworkTable m_networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTable m_networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+  Timer autoTimer = new Timer();
   //END MODDED
 
   /**
@@ -70,14 +73,14 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    // //**** START LimeLight Dashboard *****
-    // //MODDED
-    // NetworkTableEntry tx = m_networkTable.getEntry("tx");
-    // NetworkTableEntry ty = m_networkTable.getEntry("ty");
-    // NetworkTableEntry ta = m_networkTable.getEntry("ta");
-    // //END MODDED
+    //**** START LimeLight Dashboard *****
+    //MODDED
+    NetworkTableEntry tx = m_networkTable.getEntry("tx");
+    NetworkTableEntry ty = m_networkTable.getEntry("ty");
+    NetworkTableEntry ta = m_networkTable.getEntry("ta");
+    //END MODDED
 
-    // //ORIG
+    //ORIG
     // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     // //END ORIG
 
@@ -85,19 +88,25 @@ public class Robot extends TimedRobot {
     // NetworkTableEntry tx = table.getEntry("tx");
     // NetworkTableEntry ty = table.getEntry("ty");
     // NetworkTableEntry ta = table.getEntry("ta");
-    // //END ORIG
+    //END ORIG
 
-    // //read values periodically
-    // double x = tx.getDouble(0.0);
-    // double y = ty.getDouble(0.0);
-    // double area = ta.getDouble(0.0);
+    double txx = LimelightHelpers.getTX("");
+    SmartDashboard.putNumber("TX alt", txx); //these worked...
+    LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 0);
+    LimelightResults lr = LimelightHelpers.getLatestResults(Constants.kLimelightName);
+    lr.getBotPose2d_wpiBlue();
 
-    // //post to smart dashboard periodically
-    // SmartDashboard.putNumber("LimelightX", x);
-    // SmartDashboard.putNumber("LimelightY", y);
-    // SmartDashboard.putNumber("LimelightArea", area);
+    //read values periodically
+    double x = tx.getDouble(0.0);
+    double y = ty.getDouble(0.0);
+    double area = ta.getDouble(0.0);
 
-    // //***** END LimeLight Dashboard ****
+    //post to smart dashboard periodically
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", area);
+
+    //***** END LimeLight Dashboard ****
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -111,7 +120,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    autoTimer.reset();
+    autoTimer.start();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -120,7 +130,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    m_robotContainer.getAutoPeriodic(autoTimer);
+  }
 
   @Override
   public void teleopInit() {
@@ -155,7 +167,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    m_robotContainer.getSimPeriodic(m_field);
+  }
 
   @Override
   public void robotInit(){
