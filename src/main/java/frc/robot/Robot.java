@@ -29,6 +29,7 @@ import frc.robot.limelightlib.LimelightHelpers.LimelightResults;
 //END ORIG
 //MODDED from limelight documentation about event prep to 2025 library that exists
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.Timer;
 //END MODDED from limelight documentation about event prep to 2025 library that exists
 
 
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
   private Field2d m_field = new Field2d();
   //MODDED
   NetworkTable m_networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+  Timer autoTimer = new Timer();
   //END MODDED
 
   /**
@@ -90,8 +92,8 @@ public class Robot extends TimedRobot {
 
     double txx = LimelightHelpers.getTX("");
     SmartDashboard.putNumber("TX alt", txx); //these worked...
-    LimelightHelpers.setPipelineIndex("", 0);
-    LimelightResults lr = LimelightHelpers.getLatestResults("");
+    LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 0);
+    LimelightResults lr = LimelightHelpers.getLatestResults(Constants.kLimelightName);
     lr.getBotPose2d_wpiBlue();
 
     //read values periodically
@@ -118,7 +120,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    autoTimer.reset();
+    autoTimer.start();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -127,7 +130,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    m_robotContainer.getAutoPeriodic(autoTimer);
+  }
 
   @Override
   public void teleopInit() {

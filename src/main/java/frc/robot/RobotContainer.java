@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.controllers.DriverMapping6237MR;
 import frc.robot.generated.TunerConstants;
+import frc.robot.limelightlib.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import edu.wpi.first.wpilibj.Timer;
  //HERE!!! END BLOCK IMPORTED FROM PHOENIX GENERATED SWERVE
 
 
@@ -139,5 +141,9 @@ public class RobotContainer {
   
   public void getSimPeriodic(Field2d field) {
     field.setRobotPose(drivetrain.getState().Pose);
+  }
+
+  public void getAutoPeriodic(Timer timer) {
+    // drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(Constants.kLimelightName), Timer.getMatchTime());
   }
 }
