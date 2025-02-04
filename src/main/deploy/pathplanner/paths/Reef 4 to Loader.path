@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.6464999999999996,
+        "y": 2.5429999999999997
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.77875,
+        "y": 3.1182499999999997
+      },
+      "isLocked": false,
+      "linkedName": "Reef 4"
+    },
+    {
+      "anchor": {
+        "x": 2.028,
+        "y": 4.2395
+      },
+      "prevControl": {
+        "x": 1.9519481468220437,
+        "y": 3.1402050313368113
+      },
+      "nextControl": {
+        "x": 2.13525,
+        "y": 5.789750000000001
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.365,
+        "y": 6.969499999999999
+      },
+      "prevControl": {
+        "x": 2.0085,
+        "y": 6.21875
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Coral Loader"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 125.00000000000001
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 58.00000000000001
+  },
+  "useDefaultConstraints": true
+}
