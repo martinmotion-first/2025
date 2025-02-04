@@ -173,44 +173,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit(){
-    //HERE!!! - commenting out robotinit for angle testing. Shouldn't interfere, but preventing unnecessary processing...
-    
-    // double xOffset = 3;
-    // double yOffset = 3;
-
-    // double maxVelocity = Units.feetToMeters(3.0);
-    // double maxAcceleration = Units.feetToMeters(3.0);
-    // // Create the trajectory to follow in autonomous. It is best to initialize
-    // // trajectories here to avoid wasting time in autonomous.
-    // Trajectory m_trajectory =
-    //     TrajectoryGenerator.generateTrajectory(
-    //         new Pose2d(0 + xOffset, 0 + yOffset, Rotation2d.fromDegrees(0)),
-    //         List.of(new Translation2d(1 + xOffset, 1 + yOffset), new Translation2d(2 + xOffset, -1 + yOffset)),
-    //         new Pose2d(3 + xOffset, 0 + yOffset, Rotation2d.fromDegrees(0)),
-    //         new TrajectoryConfig(maxVelocity, maxAcceleration));
-
-    // // Trajectory m_trajectoryOrig =
-    // //   TrajectoryGenerator.generateTrajectory(
-    // //       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-    // //       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-    // //       new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-    // //       new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
-
-    // // Create and push Field2d to SmartDashboard.
-    // m_field = new Field2d();
-    // SmartDashboard.putData(m_field);
-
-    // // Push the trajectory to Field2d.
-
-    // m_field.getObject("traj").setTrajectory(m_trajectory);
-    // // m_field.getObject("trajOrig").setTrajectory(m_trajectoryOrig);
-
     //   //ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
     //   // Make sure you only configure port forwarding once in your robot code.
     //   // Do not place these function calls in any periodic functions
-    //   for (int port = 5800; port <= 5809; port++) {
-    //     PortForwarder.add(port, "limelight.local", port);
-    //   }
+      for (int port = 5800; port <= 5809; port++) {
+        PortForwarder.add(port, "limelight.local", port);
+      }
     //   //END ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
 
   }
