@@ -67,6 +67,9 @@ import edu.wpi.first.math.util.Units;
         public static final int MOTOR_ID = 5;
         public static final boolean MOTOR_INVERTED = false;
 
+        public static final int MOTOR_ID2 = 6;
+        public static final boolean MOTOR_INVERTED2 = true;
+
         public static final DCMotor MOTOR_GEARBOX_REPR = DCMotor.getNEO(1);
         public static final double GEARING = 5.0;
         public static final double MASS_KG = Units.lbsToKilograms(20);
@@ -88,8 +91,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 1.0; // TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 1.3; // TODO
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3; // TODO
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 1; // TODO HERE!!! (tuning way down for intial attempt (from 1.3))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .1; // TODO HERE!!! (tuning way down for intial attempt (from 3))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }

@@ -42,11 +42,13 @@ import static frc.robot.Constants.Elevator.*;
 
 public class Elevator extends SubsystemBase implements BaseLinearMechanism<ElevatorPosition> {
     private final SparkMax motor;
+    private final SparkMax motor2;
 
     private SparkMaxConfig motorConfig;
+    private SparkMaxConfig motorConfig2;
 
     private final ProfiledPIDController pidController = new ProfiledPIDController(kP, kI, kD, MOVEMENT_CONSTRAINTS);
-
+    
     private final ElevatorFeedforward feedforwardController = new ElevatorFeedforward(kS,
             kG, kV, kA);
 
@@ -83,17 +85,22 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
 
     public Elevator(PositionTracker positionTracker, MechanismLigament2d ligament) {
         motorConfig = new SparkMaxConfig();
-
+        
         motorConfig
-                .inverted(MOTOR_INVERTED)
-                .idleMode(IdleMode.kBrake)
-                .smartCurrentLimit(CURRENT_LIMIT);
+            .inverted(MOTOR_INVERTED)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(CURRENT_LIMIT);
         motorConfig.encoder
-                .positionConversionFactor(ENCODER_ROTATIONS_TO_METERS)
-                .velocityConversionFactor(ENCODER_ROTATIONS_TO_METERS / 60.0);
-
+            .positionConversionFactor(ENCODER_ROTATIONS_TO_METERS)
+            .velocityConversionFactor(ENCODER_ROTATIONS_TO_METERS / 60.0);
+        
         motor = new SparkMax(MOTOR_ID, MotorType.kBrushless);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        motorConfig2 = new SparkMaxConfig();
+        motorConfig2.follow(motor, MOTOR_INVERTED2);
+        motor2 = new SparkMax(MOTOR_ID2,MotorType.kBrushless);
+        motor2.configure(motorConfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         sysIdRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(Volts.of(1).per(Seconds), Volts.of(5), null, null),
@@ -238,10 +245,14 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
                 .andThen(() -> {
                     motorConfig.idleMode(IdleMode.kCoast);
                     motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+                    motorConfig2.follow(motor, MOTOR_INVERTED2);
+                    motor2.configure(motorConfig2, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
                 })
                 .finallyDo((d) -> {
                     motorConfig.idleMode(IdleMode.kBrake);
                     motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+                    // motorConfig2.follow(motor, MOTOR_INVERTED2);
+                    // motor2.configure(motorConfig2, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
                     pidController.reset(getPosition());
                 }).withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
                 .withName("elevator.coastMotorsCommand");
