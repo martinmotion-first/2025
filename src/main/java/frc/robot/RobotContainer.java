@@ -5,12 +5,14 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.RobotCommands;
 import frc.robot.controllers.DriverMapping6237MR;
 import frc.robot.controllers.OperatorMapping6237MR;
 import frc.robot.generated.TunerConstants;
 import frc.robot.limelightlib.LimelightHelpers;
 import frc.robot.rusthounds_util.CoralSim;
 import frc.robot.rusthounds_util.PositionTracker;
+import frc.robot.rusthounds_util.ScoreLevel;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -19,6 +21,7 @@ import frc.robot.subsystems.Intake;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -75,12 +78,12 @@ public class RobotContainer {
                     new Color8Bit(Color.kRed)));
 
   // HERE!!! - commenting out while these features do not exist on the robot yet
-  // PositionTracker positionTracker = new PositionTracker();
-  // Elevator elevator = new Elevator(positionTracker, elevatorLigament);
-  // Arm arm = new Arm(positionTracker, armLigament, elevator::getCarriageComponentPose);
-  // Intake intake = new Intake();
-  // Climber climber = new Climber();
-  // CoralSim coralSim = new CoralSim(() -> drivetrain.getState().Pose, arm::getClawComponentPose);
+  PositionTracker positionTracker = new PositionTracker();
+  Elevator elevator = new Elevator(positionTracker, elevatorLigament);
+  Arm arm = new Arm(positionTracker, armLigament, elevator::getCarriageComponentPose);
+  Intake intake = new Intake();
+  Climber climber = new Climber();
+  CoralSim coralSim = new CoralSim(() -> drivetrain.getState().Pose, arm::getClawComponentPose);
 
   
 
@@ -102,12 +105,27 @@ public class RobotContainer {
     SmartDashboard.putData("Drive motor module 2 (back-left)", drivetrain.getModule(2).getDriveMotor());
     SmartDashboard.putData("Drive motor module 3 (back-right)", drivetrain.getModule(3).getDriveMotor());
     // Configure the trigger bindings
+
+    // NamedCommands.registerCommand("prepareCoralScoreCommand", RobotCommands.prepareCoralScoreCommand(null, elevator, arm, coralSim));
+    NamedCommands.registerCommand("autoPrepareCoralScoreCommandL2", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
+    NamedCommands.registerCommand("autoPrepareCoralScoreCommandL3", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
+    NamedCommands.registerCommand("autoPrepareCoralScoreCommandL4", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
+    NamedCommands.registerCommand("scoreCoralCommand", RobotCommands.scoreCoralCommand(elevator, arm, coralSim));
+    NamedCommands.registerCommand("prepareIntakeCoralCommand", RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
+    NamedCommands.registerCommand("intakeCoralCommand", RobotCommands.intakeCoralCommand(elevator, arm, coralSim));
+    NamedCommands.registerCommand("intakeIntoScoreCommandL2", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
+    NamedCommands.registerCommand("intakeIntoScoreCommandL3", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
+    NamedCommands.registerCommand("intakeIntoScoreCommandL4", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
+    NamedCommands.registerCommand("prepareAlgaeL2RemoveCommand", RobotCommands.prepareAlgaeL2RemoveCommand(elevator, arm));
+    NamedCommands.registerCommand("prepareAlgaeL3RemoveCommand", RobotCommands.prepareAlgaeL3RemoveCommand(elevator, arm));
+    NamedCommands.registerCommand("algaeRemoveCommand", RobotCommands.algaeRemoveCommand(elevator, arm));
+
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
     DriverMapping6237MR.mapXboxController(driver, drivetrain);
-    // OperatorMapping6237MR.mapXboxController(operator, elevator, arm, intake, climber, coralSim);
+    OperatorMapping6237MR.mapXboxController(operator, elevator, arm, intake, climber, coralSim);
   }
 
   /**
