@@ -110,7 +110,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("autoPrepareCoralScoreCommandL2", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
     NamedCommands.registerCommand("autoPrepareCoralScoreCommandL3", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
     NamedCommands.registerCommand("autoPrepareCoralScoreCommandL4", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
-    NamedCommands.registerCommand("scoreCoralCommand", RobotCommands.scoreCoralCommand(elevator, arm, coralSim));
+    NamedCommands.registerCommand("scoreCoralCommand", RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
     NamedCommands.registerCommand("prepareIntakeCoralCommand", RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
     NamedCommands.registerCommand("intakeCoralCommand", RobotCommands.intakeCoralCommand(elevator, arm, coralSim));
     NamedCommands.registerCommand("intakeIntoScoreCommandL2", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
@@ -125,7 +125,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     DriverMapping6237MR.mapXboxController(driver, drivetrain);
-    OperatorMapping6237MR.mapXboxController(operator, elevator, arm, intake, climber, coralSim);
+    OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, coralSim);
   }
 
   /**

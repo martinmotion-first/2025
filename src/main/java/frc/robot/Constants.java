@@ -64,14 +64,14 @@ import edu.wpi.first.math.util.Units;
 
         public static final double SCORING_MOVEMENT = -0.25;
 
-        public static final int MOTOR_ID = 5;
+        public static final int MOTOR_ID = 1;
         public static final boolean MOTOR_INVERTED = false;
 
-        public static final int MOTOR_ID2 = 16;
+        public static final int MOTOR_ID2 = 3;
         public static final boolean MOTOR_INVERTED2 = true;
 
         public static final DCMotor MOTOR_GEARBOX_REPR = DCMotor.getNEO(1);
-        public static final double GEARING = 5.0;
+        public static final double GEARING = 15.0; // changing from 5.0;
         public static final double MASS_KG = Units.lbsToKilograms(20);
         public static final double DRUM_RADIUS_METERS = Units.inchesToMeters(1.32) / 2.0; // TODO
         public static final double DRUM_CIRCUMFERENCE = 2.0 * Math.PI * DRUM_RADIUS_METERS;
@@ -117,11 +117,11 @@ import edu.wpi.first.math.util.Units;
         public static final double MOTION_LIMIT = -0.7;
         public static final double SCORING_MOVEMENT = -0.8;
 
-        public static final int MOTOR_ID = 12;
+        public static final int MOTOR_ID = 5;
         public static final boolean MOTOR_INVERTED = true;
 
         public static final DCMotor MOTOR_GEARBOX_REPR = DCMotor.getNEO(1);
-        public static final double GEARING = 40.0; // TODO
+        public static final double GEARING = 45.0; //changing from 40.0;
         public static final double MASS_KG = Units.lbsToKilograms(10); // TODO
         public static final double COM_DISTANCE_METERS = Units.inchesToMeters(6); // TODO
         public static final double MOI = SingleJointedArmSim.estimateMOI(COM_DISTANCE_METERS, MASS_KG);
@@ -148,20 +148,20 @@ import edu.wpi.first.math.util.Units;
     }
 
     public static final class Intake {
-        public static final int MOTOR_ID = 13;
+        public static final int MOTOR_ID = 6;
         public static final boolean MOTOR_INVERTED = true;
-        public static final int CURRENT_LIMIT = 60;
+        public static final int CURRENT_LIMIT = 40; //dropping down to 60;
     }
 
     public static final class Climber {
-        public static final int MOTOR_ID = 6;
+        public static final int MOTOR_ID = 4;
         public static final boolean MOTOR_INVERTED = false;
         public static final int CURRENT_LIMIT = 60;
 
         public static final double MIN_POSITION_METERS = 0.0;
-        public static final double MAX_POSITION_METERS = 1.0; // TODO
+        public static final double MAX_POSITION_METERS = 0.1; // TODO HERE!!! (tuning way down for intial attempt (from 1.0))
 
-        public static final double GEARING = 64.0;
+        public static final double GEARING = 80.0; //changing from 64.0
         public static final double MASS_KG = Units.lbsToKilograms(80); // robot weight
         public static final double SPOOL_RADIUS_METERS = Units.inchesToMeters(0.5);
         public static final double SPOOL_CIRCUMFERENCE = 2.0 * Math.PI * SPOOL_RADIUS_METERS;

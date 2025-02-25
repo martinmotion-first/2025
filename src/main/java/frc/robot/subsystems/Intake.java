@@ -40,7 +40,6 @@ public class Intake extends SubsystemBase implements BaseIntake {
                 () -> setRollerVoltage(0))
                 .withName("intake.runRollers");
     }
-
     @Override
     public Command reverseRollersCommand() {
         return Commands.startEnd(

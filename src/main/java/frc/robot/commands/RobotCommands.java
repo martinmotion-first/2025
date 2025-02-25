@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.io.Console;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,12 +12,14 @@ import frc.robot.rusthounds_util.CoralSim;
 import frc.robot.rusthounds_util.ScoreLevel;
 import frc.robot.rusthounds_util.CoralSim.CoralSimLocation;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 
 public class RobotCommands {
     public static ScoreLevel lastScore = ScoreLevel.None;
 
     public static Command prepareCoralScoreCommand(ScoreLevel level, Elevator elevator, Arm arm, CoralSim coralSim) {
+        System.out.println("In prepareCoralScoreCommand w level:" + level);
         ElevatorPosition elevatorPosition;
         ArmPosition armPosition;
         switch (level) {
@@ -85,7 +88,7 @@ public class RobotCommands {
                                 .andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())));
     }
 
-    public static Command scoreCoralCommand(Elevator elevator, Arm arm, CoralSim coralSim) { //Drivetrain drivetrain, 
+    public static Command scoreCoralCommand(CommandSwerveDrivetrain drivetrain, Elevator elevator, Arm arm, CoralSim coralSim) { //Drivetrain drivetrain, 
         Map<ScoreLevel, Command> commandMap = Map.ofEntries(
                 Map.entry(
                         ScoreLevel.L1, Commands.parallel(
@@ -117,12 +120,14 @@ public class RobotCommands {
     }
 
     public static Command prepareIntakeCoralCommand(Elevator elevator, Arm arm, CoralSim coralSim) {
+        System.out.println("In prepareIntakeCoralCommand");
         return Commands.sequence(
                 Commands.parallel(elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE_PREP).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()));
     }
 
     public static Command intakeCoralCommand(Elevator elevator, Arm arm, CoralSim coralSim) {
+        System.out.println("In intakeCoralCommand");
         return Commands.sequence(
                 prepareIntakeCoralCommand(elevator, arm, coralSim),
                 Commands.parallel(
@@ -137,6 +142,7 @@ public class RobotCommands {
     }
 
     public static Command intakeIntoScoreCommand(ScoreLevel level, Elevator elevator, Arm arm, CoralSim coralSim) {
+        System.out.println("In intakeIntoScoreCommand");
         return Commands.sequence(
                 Commands.parallel(
                         elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE).asProxy(),
@@ -146,12 +152,14 @@ public class RobotCommands {
     }
 
     public static Command prepareAlgaeL2RemoveCommand(Elevator elevator, Arm arm) {
+        System.out.println("In prepareAlgaeL2RemoveCommand");
         return Commands.sequence(
                 Commands.parallel(elevator.moveToPositionCommand(() -> ElevatorPosition.ALGAE_L2).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.HORIZONTAL).asProxy()));
     }
 
     public static Command prepareAlgaeL3RemoveCommand(Elevator elevator, Arm arm) {
+        System.out.println("In prepareAlgaeL2RemoveCommand");
         return Commands.sequence(
                 Commands.parallel(elevator.moveToPositionCommand(() -> ElevatorPosition.ALGAE_L3).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.HORIZONTAL).asProxy()));
