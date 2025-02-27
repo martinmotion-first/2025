@@ -12,8 +12,11 @@ import frc.robot.rusthounds_util.CoralSim;
 import frc.robot.rusthounds_util.ScoreLevel;
 import frc.robot.rusthounds_util.CoralSim.CoralSimLocation;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArm;
 
 public class RobotCommands {
     public static ScoreLevel lastScore = ScoreLevel.None;
@@ -124,6 +127,56 @@ public class RobotCommands {
         return Commands.sequence(
                 Commands.parallel(elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE_PREP).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()));
+    }
+
+    public static Command armOnlyMoveToBottom(Elevator elevator, Arm arm, CoralSim coralSim) {
+        return arm.moveToPositionCommand(() -> ArmPosition.BOTTOM);
+    }
+    public static Command armOnlyMoveToHorizontal(Elevator elevator, Arm arm, CoralSim coralSim) {
+        return arm.moveToPositionCommand(() -> ArmPosition.HORIZONTAL);
+    }
+    public static Command elevatorOnlyMoveToBottom(Elevator elevator, Arm arm, CoralSim coralSim) {
+        return elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE);
+    }
+    public static Command elevatorOnlyMoveToL3(Elevator elevator, Arm arm, CoralSim coralSim) {
+        return elevator.moveToPositionCommand(() -> ElevatorPosition.ALGAE_L3);
+    }
+
+    public static Command intakeArmGivePositiveVoltage(IntakeArm intakeArm) {
+        return intakeArm.testSetVoltage(1);
+    }
+    public static Command intakeArmGiveNegativeVoltage(IntakeArm intakeArm) {
+        return intakeArm.testSetVoltage(-1);
+    }
+
+    public static Command elevatorOnlyGivePositiveVoltage(Elevator elevator){
+        return elevator.testSetVoltage(1);
+    }
+
+    public static Command elevatorOnlyGiveNegativeVoltage(Elevator elevator){
+        return elevator.testSetVoltage(-1);
+    }
+
+    public static Command elevatorOnlyGiveZero(Elevator elevator){
+        return elevator.testSetVoltage(0);
+    }
+
+    public static Command armOnlyGivePositiveVoltage(Arm arm){
+        return arm.testSetVoltage(2);
+    }
+
+    public static Command armOnlyGiveNegativeVoltage(Arm arm){
+        return arm.testSetVoltage(-2);
+    }
+
+    public static Command kill(Elevator elevator, Arm arm, Intake intake, Climber climber, IntakeArm intakeArm){
+        return Commands.sequence(
+            Commands.runOnce(() -> arm.testSetVoltage(0)),
+            Commands.runOnce(() -> elevator.testSetVoltage(0)),
+            Commands.runOnce(() -> intakeArm.testSetVoltage(0)),
+            Commands.runOnce(() -> climber.setVoltage(0)),
+            Commands.runOnce(() -> intake.setRollerVoltage(0))
+        );
     }
 
     public static Command intakeCoralCommand(Elevator elevator, Arm arm, CoralSim coralSim) {

@@ -32,16 +32,17 @@ import frc.robot.Constants;
 import frc.robot.rusthounds_util.PositionTracker;
 import frc.robot.rusthounds_util.Utils;
 import frc.robot.Constants.Arm.ArmPosition;
+import frc.robot.Constants.IntakeArm.IntakeArmPosition;
 import frc.robot.rusthounds_util.GlobalStates;
 
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
-import static frc.robot.Constants.Arm.*;
+import static frc.robot.Constants.IntakeArm.*;
 
 
-public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPosition> {
+public class IntakeArm extends SubsystemBase {
     private final SparkMax motor;
 
     private SparkMaxConfig motorConfig;
@@ -75,15 +76,11 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
     private final MutAngle sysidPositionMeasure = Radians.mutable(0);
     private final MutAngularVelocity sysidVelocityMeasure = RadiansPerSecond.mutable(0);
 
-    private final SysIdRoutine sysIdRoutine;
-
-    private final PositionTracker positionTracker;
-    private final MechanismLigament2d ligament;
-    private final Supplier<Pose3d> carriagePoseSupplier;
+    // private final SysIdRoutine sysIdRoutine;
 
     private boolean initialized;
 
-    public Arm(PositionTracker positionTracker, MechanismLigament2d ligament, Supplier<Pose3d> carriagePoseSupplier) {
+    public IntakeArm() {
 
         motorConfig = new SparkMaxConfig();
         motorConfig
@@ -97,25 +94,21 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
         motor = new SparkMax(MOTOR_ID, MotorType.kBrushless);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        sysIdRoutine = new SysIdRoutine(
-                new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(3), null, null),
-                new SysIdRoutine.Mechanism(
-                        (Voltage volts) -> setVoltage(volts.magnitude()),
-                        log -> {
-                            log.motor("primary")
-                                    .voltage(sysidAppliedVoltageMeasure.mut_replace(motor.getAppliedOutput(), Volts))
-                                    .angularPosition(sysidPositionMeasure.mut_replace(getPosition(), Radians))
-                                    .angularVelocity(sysidVelocityMeasure.mut_replace(getVelocity(), RadiansPerSecond));
-                        },
-                        this));
+        // sysIdRoutine = new SysIdRoutine(
+        //         new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(3), null, null),
+        //         new SysIdRoutine.Mechanism(
+        //                 (Voltage volts) -> setVoltage(volts.magnitude()),
+        //                 log -> {
+        //                     log.motor("primary")
+        //                             .voltage(sysidAppliedVoltageMeasure.mut_replace(motor.getAppliedOutput(), Volts))
+        //                             .angularPosition(sysidPositionMeasure.mut_replace(getPosition(), Radians))
+        //                             .angularVelocity(sysidVelocityMeasure.mut_replace(getVelocity(), RadiansPerSecond));
+        //                 },
+        //                 this));
 
-        this.positionTracker = positionTracker;
-        this.ligament = ligament;
-        this.carriagePoseSupplier = carriagePoseSupplier;
+        // setDefaultCommand(coastMotorsCommand());
 
-        positionTracker.setArmAngleSupplier(this::getPosition);
-
-        setDefaultCommand(moveToCurrentGoalCommand());
+        // motor.getEncoder().setPosition(0);
         resetPosition();
     }
 
@@ -125,52 +118,34 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
         armSim.update(0.020);
         motor.getEncoder().setPosition(armSim.getAngleRads());
         simVelocity = armSim.getVelocityRadPerSec();
-        ligament.setAngle(Units.radiansToDegrees(getPosition()) + 270);
     }
 
     public boolean getInitialized() {
         return initialized;
     }
 
-    // return new Pose3d(0.168, 0, 0.247, new Rotation3d());
-    // -0.083
-
-    public Pose3d getArmComponentPose() {
-        return carriagePoseSupplier.get()
-                .plus(new Transform3d(0.083, 0, 0, new Rotation3d()))
-                .plus(new Transform3d(0, 0, 0, new Rotation3d(0, -getPosition(), 0)));
-    }
-
-    public Pose3d getClawComponentPose() {
-        return getArmComponentPose().plus(new Transform3d(0.2585, 0, 0, new Rotation3d()));
-    }
-
-    @Override
     public double getPosition() {
         return motor.getEncoder().getPosition();
     }
 
-    public double getVelocity() {
-        if (RobotBase.isReal())
-            return motor.getEncoder().getVelocity();
-        else
-            return simVelocity;
+    public double getAbsolutePositionMaybe(){
+        return motor.getAbsoluteEncoder().getPosition();
     }
 
-    @Override
+    public double getVelocity() {
+        return motor.getEncoder().getVelocity();
+    }
+
     public void resetPosition() {
-        motor.getEncoder().setPosition(ArmPosition.TOP.value);
+        motor.getEncoder().setPosition(IntakeArmPosition.BOTTOM.value);
         initialized = true;
     }
 
-    @Override
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -12, 12);
         voltage = Utils.applySoftStops(voltage, getPosition(), MIN_ANGLE_RADIANS, MAX_ANGLE_RADIANS);
 
-        if (voltage < 0
-                && getPosition() < 0
-                && positionTracker.getElevatorPosition() < Constants.Elevator.MOTION_LIMIT) {
+        if (voltage < 0 && getPosition() < 0) {
             voltage = 0;
         }
 
@@ -181,7 +156,19 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
         motor.setVoltage(voltage);
     }
 
-    @Override
+    public Command testSetVoltage(double voltage){
+        // return run(() -> {
+        //     double clampedVoltage = MathUtil.clamp(voltage, -.1, .1);
+        //     motor.setVoltage(clampedVoltage);
+            
+        // }).for(1).andThen(() -> motor.setVoltage(0));
+        return Commands.sequence(
+            Commands.runOnce(() -> motor.setVoltage(voltage), this),
+            Commands.waitSeconds(1),
+            Commands.runOnce(() -> motor.setVoltage(0), this)
+        ).finallyDo(() -> motor.setVoltage(0));
+    }
+
     public Command moveToCurrentGoalCommand() {
         return run(() -> {
             feedbackVoltage = pidController.calculate(getPosition());
@@ -189,21 +176,19 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
             // position for kG works best
             feedforwardVoltage = feedforwardController.calculate(getPosition(), pidController.getSetpoint().velocity);
             setVoltage(feedbackVoltage + feedforwardVoltage);
-        }).withName("arm.moveToCurrentGoal");
+        }).withName("intakeArm.moveToCurrentGoal");
     }
 
-    @Override
-    public Command moveToPositionCommand(Supplier<ArmPosition> goalPositionSupplier) {
+    public Command moveToPositionCommand(Supplier<IntakeArmPosition> goalPositionSupplier) {
         return Commands.sequence(
                 runOnce(() -> pidController.reset(getPosition())),
                 runOnce(() -> pidController.setGoal(goalPositionSupplier.get().value)),
                 moveToCurrentGoalCommand()
                         .until(() -> pidController.atGoal()))
                 .withTimeout(3)
-                .withName("arm.moveToPosition");
+                .withName("intakeArm.moveToPosition");
     }
 
-    @Override
     public Command moveToArbitraryPositionCommand(Supplier<Double> goalPositionSupplier) {
         return Commands.sequence(
                 runOnce(() -> pidController.reset(getPosition())),
@@ -211,30 +196,25 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 moveToCurrentGoalCommand().until(this::atGoal)).withName("arm.moveToArbitraryPosition");
     }
 
-    @Override
     public Command movePositionDeltaCommand(Supplier<Double> delta) {
         return moveToArbitraryPositionCommand(() -> pidController.getGoal().position + delta.get())
-                .withName("arm.movePositionDelta");
+                .withName("intakeArm.movePositionDelta");
     }
 
-    @Override
     public Command holdCurrentPositionCommand() {
         return runOnce(() -> pidController.setGoal(getPosition())).andThen(moveToCurrentGoalCommand())
-                .withName("arm.holdCurrentPosition");
+                .withName("intakeArm.holdCurrentPosition");
     }
 
-    @Override
     public Command resetPositionCommand() {
-        return runOnce(this::resetPosition).withName("arm.resetPosition");
+        return runOnce(this::resetPosition).withName("intakeArm.resetPosition");
     }
 
-    @Override
     public Command setOverridenSpeedCommand(Supplier<Double> speed) {
         return runEnd(() -> setVoltage(12.0 * speed.get()), () -> setVoltage(0))
-                .withName("arm.setOverriddenSpeed");
+                .withName("intakeArm.setOverriddenSpeed");
     }
 
-    @Override
     public Command coastMotorsCommand() {
         return runOnce(motor::stopMotor)
                 .andThen(() -> {
@@ -246,16 +226,16 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                     motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
                     pidController.reset(getPosition());
                 }).withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
-                .withName("arm.coastMotorsCommand");
+                .withName("intakeArm.coastMotorsCommand");
     }
 
-    public Command sysIdQuasistaticCommand(SysIdRoutine.Direction direction) {
-        return sysIdRoutine.quasistatic(direction).withName("elevator.sysIdQuasistatic");
-    }
+    // public Command sysIdQuasistaticCommand(SysIdRoutine.Direction direction) {
+    //     return sysIdRoutine.quasistatic(direction).withName("elevator.sysIdQuasistatic");
+    // }
 
-    public Command sysIdDynamicCommand(SysIdRoutine.Direction direction) {
-        return sysIdRoutine.dynamic(direction).withName("elevator.sysIdDynamic");
-    }
+    // public Command sysIdDynamicCommand(SysIdRoutine.Direction direction) {
+    //     return sysIdRoutine.dynamic(direction).withName("elevator.sysIdDynamic");
+    // }
 
     public Command resetControllersCommand() {
         return Commands.runOnce(() -> pidController.reset(getPosition()))
@@ -264,13 +244,5 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
 
     public boolean atGoal() {
         return pidController.atGoal();
-    }
-
-    public Command testSetVoltage(double voltage){
-        return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this),
-            Commands.waitSeconds(1),
-            Commands.runOnce(() -> motor.setVoltage(0), this)
-        ).finallyDo(() -> motor.setVoltage(0));
     }
 }

@@ -18,6 +18,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArm;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -77,14 +78,13 @@ public class RobotContainer {
                     5,
                     new Color8Bit(Color.kRed)));
 
-  // HERE!!! - commenting out while these features do not exist on the robot yet
   PositionTracker positionTracker = new PositionTracker();
   Elevator elevator = new Elevator(positionTracker, elevatorLigament);
   Arm arm = new Arm(positionTracker, armLigament, elevator::getCarriageComponentPose);
   Intake intake = new Intake();
   Climber climber = new Climber();
   CoralSim coralSim = new CoralSim(() -> drivetrain.getState().Pose, arm::getClawComponentPose);
-
+  IntakeArm intakeArm = new IntakeArm();
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -104,6 +104,18 @@ public class RobotContainer {
     SmartDashboard.putData("Drive motor module 1 (front-right)", drivetrain.getModule(1).getDriveMotor());
     SmartDashboard.putData("Drive motor module 2 (back-left)", drivetrain.getModule(2).getDriveMotor());
     SmartDashboard.putData("Drive motor module 3 (back-right)", drivetrain.getModule(3).getDriveMotor());
+    SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+    SmartDashboard.putNumber("Elevator velocity", elevator.getVelocity());
+    // SmartDashboard.putData("Elevator command", elevator.getCurrentCommand());
+    SmartDashboard.putBoolean("Elevator at goal", elevator.atGoal());
+    SmartDashboard.putBoolean("Elevator initialized", elevator.getInitialized());
+    SmartDashboard.putNumber("Elevator position tracker position", positionTracker.getElevatorPosition());
+    SmartDashboard.putNumber("Intake Arm Position", intakeArm.getPosition());
+    SmartDashboard.putNumber("Intake Arm Velocity", intakeArm.getVelocity());
+    SmartDashboard.putBoolean("Intake Arm at goal", intakeArm.atGoal());
+    SmartDashboard.putBoolean("Intake arm initialized", intakeArm.getInitialized());
+
+  
     // Configure the trigger bindings
 
     // NamedCommands.registerCommand("prepareCoralScoreCommand", RobotCommands.prepareCoralScoreCommand(null, elevator, arm, coralSim));
@@ -124,8 +136,24 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    DriverMapping6237MR.mapXboxController(driver, drivetrain);
-    OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, coralSim);
+    // DriverMapping6237MR.mapXboxController(driver, drivetrain);
+    OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
+  }
+
+  public double getIntakeArmPosition(){
+    return intakeArm.getPosition();
+  }
+
+  public double getIntakeArmPositionAbsolute(){
+    return intakeArm.getAbsolutePositionMaybe();
+  }
+
+  public double getElevatorPosition(){
+    return elevator.getPosition();
+  }
+
+  public double getArmPosition(){
+    return arm.getPosition();
   }
 
   /**

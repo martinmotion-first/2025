@@ -119,6 +119,7 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
 
         positionTracker.setElevatorPositionSupplier(this::getPosition);
         setDefaultCommand(moveToCurrentGoalCommand());
+        resetPosition();
     }
 
     @Override
@@ -183,9 +184,16 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
         if (!GlobalStates.INITIALIZED.enabled()) {
             voltage = 0.0;
         }
-
         motor.setVoltage(voltage);
 
+    }
+
+    public Command testSetVoltage(double voltage){
+        return Commands.sequence(
+            Commands.runOnce(() -> motor.setVoltage(voltage), this),
+            Commands.waitSeconds(1),
+            Commands.runOnce(() -> motor.setVoltage(0), this)
+        );
     }
 
     @Override

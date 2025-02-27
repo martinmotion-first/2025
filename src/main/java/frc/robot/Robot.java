@@ -106,7 +106,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
 
+    SmartDashboard.putNumber("The actively updated intake arm position", m_robotContainer.getIntakeArmPosition());
+    // SmartDashboard.putNumber("The actively updated intake arm position absolute", m_robotContainer.getIntakeArmPositionAbsolute()); //this didn't work because the absolute encoder didn't work...
+    SmartDashboard.putNumber("Elevator position", m_robotContainer.getElevatorPosition());
     //***** END LimeLight Dashboard ****
+    SmartDashboard.putNumber("Arm position", m_robotContainer.getArmPosition());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
