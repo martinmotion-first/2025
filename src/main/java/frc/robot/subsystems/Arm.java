@@ -166,16 +166,12 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
     @Override
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -12, 12);
-        voltage = Utils.applySoftStops(voltage, getPosition(), MIN_ANGLE_RADIANS, MAX_ANGLE_RADIANS);
+        voltage = Utils.applySoftStops(voltage, getPosition(), ArmPosition.BOTTOM.value, ArmPosition.TOP.value);
 
-        if (voltage < 0
-                && getPosition() < 0
-                && positionTracker.getElevatorPosition() < Constants.Elevator.MOTION_LIMIT) {
+        if (getPosition() > Constants.Arm.MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT
+                && positionTracker.getElevatorPosition() < Constants.Elevator.MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION) {
+            System.out.println("Arm safety break fired");
             voltage = 0;
-        }
-
-        if (!GlobalStates.INITIALIZED.enabled()) {
-            voltage = 0.0;
         }
 
         motor.setVoltage(voltage);
@@ -268,9 +264,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
 
     public Command testSetVoltage(double voltage){
         return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this),
-            Commands.waitSeconds(1),
-            Commands.runOnce(() -> motor.setVoltage(0), this)
+            Commands.runOnce(() -> motor.setVoltage(voltage), this)
         ).finallyDo(() -> motor.setVoltage(0));
     }
 }

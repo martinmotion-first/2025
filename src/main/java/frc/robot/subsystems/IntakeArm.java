@@ -69,15 +69,6 @@ public class IntakeArm extends SubsystemBase {
 
     private double feedbackVoltage = 0;
     private double feedforwardVoltage = 0;
-
-    private double simVelocity = 0.0;
-
-    private final MutVoltage sysidAppliedVoltageMeasure = Volts.mutable(0);
-    private final MutAngle sysidPositionMeasure = Radians.mutable(0);
-    private final MutAngularVelocity sysidVelocityMeasure = RadiansPerSecond.mutable(0);
-
-    // private final SysIdRoutine sysIdRoutine;
-
     private boolean initialized;
 
     public IntakeArm() {
@@ -94,21 +85,6 @@ public class IntakeArm extends SubsystemBase {
         motor = new SparkMax(MOTOR_ID, MotorType.kBrushless);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        // sysIdRoutine = new SysIdRoutine(
-        //         new SysIdRoutine.Config(Volts.of(1).per(Second), Volts.of(3), null, null),
-        //         new SysIdRoutine.Mechanism(
-        //                 (Voltage volts) -> setVoltage(volts.magnitude()),
-        //                 log -> {
-        //                     log.motor("primary")
-        //                             .voltage(sysidAppliedVoltageMeasure.mut_replace(motor.getAppliedOutput(), Volts))
-        //                             .angularPosition(sysidPositionMeasure.mut_replace(getPosition(), Radians))
-        //                             .angularVelocity(sysidVelocityMeasure.mut_replace(getVelocity(), RadiansPerSecond));
-        //                 },
-        //                 this));
-
-        // setDefaultCommand(coastMotorsCommand());
-
-        // motor.getEncoder().setPosition(0);
         resetPosition();
     }
 
@@ -117,7 +93,6 @@ public class IntakeArm extends SubsystemBase {
         armSim.setInput(motor.getAppliedOutput());
         armSim.update(0.020);
         motor.getEncoder().setPosition(armSim.getAngleRads());
-        simVelocity = armSim.getVelocityRadPerSec();
     }
 
     public boolean getInitialized() {
@@ -143,29 +118,13 @@ public class IntakeArm extends SubsystemBase {
 
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -12, 12);
-        voltage = Utils.applySoftStops(voltage, getPosition(), MIN_ANGLE_RADIANS, MAX_ANGLE_RADIANS);
-
-        if (voltage < 0 && getPosition() < 0) {
-            voltage = 0;
-        }
-
-        if (!GlobalStates.INITIALIZED.enabled()) {
-            voltage = 0.0;
-        }
-
+        voltage = Utils.applySoftStops(voltage, getPosition(), IntakeArmPosition.TOP.value, IntakeArmPosition.BOTTOM.value); //TOP value is negative, so is minimum
         motor.setVoltage(voltage);
     }
 
     public Command testSetVoltage(double voltage){
-        // return run(() -> {
-        //     double clampedVoltage = MathUtil.clamp(voltage, -.1, .1);
-        //     motor.setVoltage(clampedVoltage);
-            
-        // }).for(1).andThen(() -> motor.setVoltage(0));
         return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this),
-            Commands.waitSeconds(1),
-            Commands.runOnce(() -> motor.setVoltage(0), this)
+            Commands.runOnce(() -> motor.setVoltage(voltage), this)
         ).finallyDo(() -> motor.setVoltage(0));
     }
 

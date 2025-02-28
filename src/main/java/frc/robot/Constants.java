@@ -41,17 +41,28 @@ import edu.wpi.first.math.util.Units;
 
   public static final class Elevator {
         public static enum ElevatorPosition {
-            BOTTOM(0.0698),
-            INTAKE_PREP(0.55),
-            INTAKE(0.355),
-            ALGAE_L2(0.884),
-            ALGAE_L3(1.234),
+            // BOTTOM(0.0698),
+            // INTAKE_PREP(0.55),
+            // INTAKE(0.355),
+            // ALGAE_L2(0.884),
+            // ALGAE_L3(1.234),
+            
+            // L1(0.323),
+            // L2(0.31),
+            // L3(0.70),
+            // L4(1.27),
+            // TOP(1.57);
+            BOTTOM(0.07),
+            INTAKE_PREP(-.154),
+            INTAKE(-.063),
+            ALGAE_L2(-.308),
+            ALGAE_L3(-.4732),
 
-            L1(0.323),
-            L2(0.31),
-            L3(0.70),
-            L4(1.27),
-            TOP(1.57);
+            L1(-.047),
+            L2(-.042),
+            L3(-.224),
+            L4(-.49),
+            TOP(-.63);
 
             public final double value;
 
@@ -60,7 +71,7 @@ import edu.wpi.first.math.util.Units;
             }
         }
 
-        public static final double MOTION_LIMIT = 0.3;
+        public static final double MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION = -0.3;
 
         public static final double SCORING_MOVEMENT = -0.25;
 
@@ -99,13 +110,21 @@ import edu.wpi.first.math.util.Units;
 
     public static final class Arm {
         public static enum ArmPosition {
-            BOTTOM(-Math.PI / 2.0 + Units.degreesToRadians(5)),
-            HORIZONTAL(0),
-            L1(0),
-            L2(Units.degreesToRadians(55)), // reef angle
-            L3(Units.degreesToRadians(55)),
-            L4(1.033),
-            TOP(Math.PI / 2.0);
+            // BOTTOM(-Math.PI / 2.0 + Units.degreesToRadians(5)),
+            // HORIZONTAL(0),
+            // L1(0),
+            // L2(Units.degreesToRadians(55)), // reef angle
+            // L3(Units.degreesToRadians(55)),
+            // L4(1.033),
+            // TOP(Math.PI / 2.0);
+
+            BOTTOM(1.57),
+            HORIZONTAL(2.47),
+            L1(2.47),
+            L2(3.073), 
+            L3(3.073),
+            L4(3.15),
+            TOP(3.379);
 
             public final double value;
 
@@ -114,7 +133,8 @@ import edu.wpi.first.math.util.Units;
             }
         }
 
-        public static final double MOTION_LIMIT = -0.7;
+        public static final double MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT = 1.8;
+
         public static final double SCORING_MOVEMENT = -0.8;
 
         public static final int MOTOR_ID = 2;
@@ -128,7 +148,7 @@ import edu.wpi.first.math.util.Units;
         public static final double ENCODER_ROTATIONS_TO_METERS = 2 * Math.PI / GEARING;
 
         public static final double MIN_ANGLE_RADIANS = -Math.PI / 2.0;
-        public static final double MAX_ANGLE_RADIANS = Math.PI / 2.0;
+        public static final double MAX_ANGLE_RADIANS = Math.PI;
 
         public static final int CURRENT_LIMIT = 50;
 
@@ -171,8 +191,8 @@ import edu.wpi.first.math.util.Units;
 
     public static final class IntakeArm {
         public static enum IntakeArmPosition {
-            BOTTOM(-Math.PI / 2.0 + Units.degreesToRadians(25)),
-            TOP(Math.PI / 2.0);
+            BOTTOM(3.5),
+            TOP(-1.2);
 
             public final double value;
 
@@ -180,9 +200,6 @@ import edu.wpi.first.math.util.Units;
                 this.value = value;
             }
         }
-
-        public static final double MOTION_LIMIT = -0.7;
-        public static final double SCORING_MOVEMENT = -0.8;
 
         public static final int MOTOR_ID = 5;
         public static final boolean MOTOR_INVERTED = true;

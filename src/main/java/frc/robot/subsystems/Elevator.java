@@ -173,27 +173,22 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
     @Override
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -12, 12);
-        voltage = Utils.applySoftStops(voltage, getPosition(), MIN_HEIGHT_METERS, MAX_HEIGHT_METERS);
+        voltage = Utils.applySoftStops(voltage, getPosition(), ElevatorPosition.TOP.value, ElevatorPosition.BOTTOM.value); //TOP value is negative, so is minimum
 
-        if (voltage < 0
-                && positionTracker.getElevatorPosition() < Constants.Elevator.MOTION_LIMIT
-                && positionTracker.getArmAngle() < 0) {
+        if (positionTracker.getElevatorPosition() < Constants.Elevator.MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION
+                && positionTracker.getArmAngle() > Constants.Arm.MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT) {
+            System.out.println("Elevator safety break fired");
             voltage = 0;
         }
 
-        if (!GlobalStates.INITIALIZED.enabled()) {
-            voltage = 0.0;
-        }
         motor.setVoltage(voltage);
 
     }
 
     public Command testSetVoltage(double voltage){
         return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this),
-            Commands.waitSeconds(1),
-            Commands.runOnce(() -> motor.setVoltage(0), this)
-        );
+            Commands.runOnce(() -> motor.setVoltage(voltage), this)
+        ).finallyDo(() -> motor.setVoltage(0));
     }
 
     @Override
