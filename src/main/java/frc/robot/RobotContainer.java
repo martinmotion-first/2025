@@ -64,7 +64,7 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   private final CommandXboxController driver = new CommandXboxController(Constants.kXboxDriverPort);
   private final CommandXboxController operator = new CommandXboxController(Constants.kXboxOperatorPort);
-
+  private final CommandXboxController operatorAlterante = new CommandXboxController(Constants.kXboxOperatorManualOnlyPort);
 
 
   private Mechanism2d mechanisms = new Mechanism2d(5, 3);
@@ -90,30 +90,30 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     autoChooser = AutoBuilder.buildAutoChooser("3m straight with 90degree rotation");
-    SmartDashboard.putData("Auto Mode", autoChooser);
-    SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
-    SmartDashboard.putNumber("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder().getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder().getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("drivetrain module 2 (back-left) encoder", drivetrain.getModule(2).getEncoder().getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber("drivetrain module 3 (back-right) encoder", drivetrain.getModule(3).getEncoder().getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putData("Steer motor module 0 (front-left)", drivetrain.getModule(0).getSteerMotor());
-    SmartDashboard.putData("Steer motor module 1 (front-right)", drivetrain.getModule(1).getSteerMotor());
-    SmartDashboard.putData("Steer motor module 2 (back-left)", drivetrain.getModule(2).getSteerMotor());
-    SmartDashboard.putData("Steer motor module 3 (back-right)", drivetrain.getModule(3).getSteerMotor());
-    SmartDashboard.putData("Drive motor module 0 (front-left)", drivetrain.getModule(0).getDriveMotor());
-    SmartDashboard.putData("Drive motor module 1 (front-right)", drivetrain.getModule(1).getDriveMotor());
-    SmartDashboard.putData("Drive motor module 2 (back-left)", drivetrain.getModule(2).getDriveMotor());
-    SmartDashboard.putData("Drive motor module 3 (back-right)", drivetrain.getModule(3).getDriveMotor());
-    SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-    SmartDashboard.putNumber("Elevator velocity", elevator.getVelocity());
-    // SmartDashboard.putData("Elevator command", elevator.getCurrentCommand());
-    SmartDashboard.putBoolean("Elevator at goal", elevator.atGoal());
-    SmartDashboard.putBoolean("Elevator initialized", elevator.getInitialized());
-    SmartDashboard.putNumber("Elevator position tracker position", positionTracker.getElevatorPosition());
-    SmartDashboard.putNumber("Intake Arm Position", intakeArm.getPosition());
-    SmartDashboard.putNumber("Intake Arm Velocity", intakeArm.getVelocity());
-    SmartDashboard.putBoolean("Intake Arm at goal", intakeArm.atGoal());
-    SmartDashboard.putBoolean("Intake arm initialized", intakeArm.getInitialized());
+    // SmartDashboard.putData("Auto Mode", autoChooser);
+    // SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
+    // SmartDashboard.putNumber("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder().getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder().getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber("drivetrain module 2 (back-left) encoder", drivetrain.getModule(2).getEncoder().getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber("drivetrain module 3 (back-right) encoder", drivetrain.getModule(3).getEncoder().getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putData("Steer motor module 0 (front-left)", drivetrain.getModule(0).getSteerMotor());
+    // SmartDashboard.putData("Steer motor module 1 (front-right)", drivetrain.getModule(1).getSteerMotor());
+    // SmartDashboard.putData("Steer motor module 2 (back-left)", drivetrain.getModule(2).getSteerMotor());
+    // SmartDashboard.putData("Steer motor module 3 (back-right)", drivetrain.getModule(3).getSteerMotor());
+    // SmartDashboard.putData("Drive motor module 0 (front-left)", drivetrain.getModule(0).getDriveMotor());
+    // SmartDashboard.putData("Drive motor module 1 (front-right)", drivetrain.getModule(1).getDriveMotor());
+    // SmartDashboard.putData("Drive motor module 2 (back-left)", drivetrain.getModule(2).getDriveMotor());
+    // SmartDashboard.putData("Drive motor module 3 (back-right)", drivetrain.getModule(3).getDriveMotor());
+    // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+    // SmartDashboard.putNumber("Elevator velocity", elevator.getVelocity());
+    // // SmartDashboard.putData("Elevator command", elevator.getCurrentCommand());
+    // SmartDashboard.putBoolean("Elevator at goal", elevator.atGoal());
+    // SmartDashboard.putBoolean("Elevator initialized", elevator.getInitialized());
+    // SmartDashboard.putNumber("Elevator position tracker position", positionTracker.getElevatorPosition());
+    // SmartDashboard.putNumber("Intake Arm Position", intakeArm.getPosition());
+    // SmartDashboard.putNumber("Intake Arm Velocity", intakeArm.getVelocity());
+    // SmartDashboard.putBoolean("Intake Arm at goal", intakeArm.atGoal());
+    // SmartDashboard.putBoolean("Intake arm initialized", intakeArm.getInitialized());
 
   
     // Configure the trigger bindings
@@ -138,14 +138,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // DriverMapping6237MR.mapXboxController(driver, drivetrain);
     OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
+    OperatorMapping6237MR.mapXboxControllerManualOnlyControl(operatorAlterante, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
   }
 
   public double getIntakeArmPosition(){
     return intakeArm.getPosition();
-  }
-
-  public double getIntakeArmPositionAbsolute(){
-    return intakeArm.getAbsolutePositionMaybe();
   }
 
   public double getElevatorPosition(){

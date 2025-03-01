@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm.ArmPosition;
 import frc.robot.Constants.Elevator.ElevatorPosition;
+import frc.robot.Constants.IntakeArm.IntakeArmPosition;
 import frc.robot.rusthounds_util.CoralSim;
 import frc.robot.rusthounds_util.ScoreLevel;
 import frc.robot.rusthounds_util.CoralSim.CoralSimLocation;
@@ -185,7 +186,7 @@ public class RobotCommands {
                 Commands.parallel(
                         elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()),
-                elevator.movePositionDeltaCommand(() -> 0.31).asProxy().alongWith(
+                elevator.movePositionDeltaCommand(() -> -0.31).asProxy().alongWith(
                         Commands.waitSeconds(0.1).andThen(coralSim.setLocationCommand(CoralSimLocation.CLAW))),
                 Commands.parallel(
                         Commands.waitSeconds(0.5)
@@ -222,5 +223,24 @@ public class RobotCommands {
                 Commands.parallel(
                         // drivetrain.moveVoltageTimeCommand(-2, 0.5),
                         elevator.movePositionDeltaCommand(() -> -0.06).asProxy()));
+    }
+
+    public static Command intakeAlgaeCommand(IntakeArm intakeArm, Intake intake){
+        return Commands.sequence(
+            intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP),
+            intake.runRollersCommand(),
+            Commands.waitSeconds(3),
+            Commands.runOnce(() -> intake.setRollerVoltage(0))
+        );
+    }
+
+    public static Command scoreAlgaeCommand(IntakeArm intakeArm, Intake intake){
+        return Commands.sequence(
+            intake.reverseRollersCommand(),
+            intakeArm.moveToPositionCommand(() -> IntakeArmPosition.INTERMEDIATE),
+            Commands.waitSeconds(1.5),
+            Commands.runOnce(() -> intake.setRollerVoltage(0)),
+            intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP)
+        );
     }
 }

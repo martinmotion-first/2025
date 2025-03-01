@@ -28,6 +28,7 @@ import edu.wpi.first.math.util.Units;
 
   public static final int kXboxDriverPort = 0;
   public static final int kXboxOperatorPort = 1;
+  public static final int kXboxOperatorManualOnlyPort = 2;
 
   public static final String kLimelightName = "";
   
@@ -192,6 +193,7 @@ import edu.wpi.first.math.util.Units;
     public static final class IntakeArm {
         public static enum IntakeArmPosition {
             BOTTOM(3.5),
+            INTERMEDIATE(-1.0),
             TOP(-1.2);
 
             public final double value;

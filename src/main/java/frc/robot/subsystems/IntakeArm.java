@@ -103,10 +103,6 @@ public class IntakeArm extends SubsystemBase {
         return motor.getEncoder().getPosition();
     }
 
-    public double getAbsolutePositionMaybe(){
-        return motor.getAbsoluteEncoder().getPosition();
-    }
-
     public double getVelocity() {
         return motor.getEncoder().getVelocity();
     }
