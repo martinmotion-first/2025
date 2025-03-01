@@ -53,7 +53,7 @@ import edu.wpi.first.math.util.Units;
             // L3(0.70),
             // L4(1.27),
             // TOP(1.57);
-            BOTTOM(0.07),
+            BOTTOM(-0.007),
             INTAKE_PREP(-.154),
             INTAKE(-.063),
             ALGAE_L2(-.308),
@@ -119,13 +119,21 @@ import edu.wpi.first.math.util.Units;
             // L4(1.033),
             // TOP(Math.PI / 2.0);
 
-            BOTTOM(1.57),
-            HORIZONTAL(2.47),
-            L1(2.47),
-            L2(3.073), 
-            L3(3.073),
-            L4(3.15),
-            TOP(3.379);
+            // BOTTOM(1.57),
+            // HORIZONTAL(2.47),
+            // L1(2.47),
+            // L2(3.073), 
+            // L3(3.073),
+            // L4(3.15),
+            // TOP(3.379);
+
+            BOTTOM(0),
+            HORIZONTAL(1.3),
+            L1(1.3),
+            L2(Units.degreesToRadians(115)), 
+            L3(Units.degreesToRadians(115)),
+            L4(Units.degreesToRadians(160)),
+            TOP(2.5);
 
             public final double value;
 
@@ -192,9 +200,9 @@ import edu.wpi.first.math.util.Units;
 
     public static final class IntakeArm {
         public static enum IntakeArmPosition {
-            BOTTOM(3.5),
-            INTERMEDIATE(-1.0),
-            TOP(-1.2);
+            BOTTOM(4.3),
+            INTERMEDIATE(.2),
+            TOP(0);
 
             public final double value;
 
@@ -227,8 +235,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 0.206676;// TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = .1; // TODO HERE!!! (tuning way down for intial attempt (from 8))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .1; // TODO HERE!!! (tuning way down for intial attempt (from 4))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 3; // TODO HERE!!! (tuning way down for intial attempt (from 8))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2; // TODO HERE!!! (tuning way down for intial attempt (from 4))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }

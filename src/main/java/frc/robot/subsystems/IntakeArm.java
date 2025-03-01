@@ -86,6 +86,7 @@ public class IntakeArm extends SubsystemBase {
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         resetPosition();
+        setDefaultCommand(moveToCurrentGoalCommand());
     }
 
     @Override
@@ -108,7 +109,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public void resetPosition() {
-        motor.getEncoder().setPosition(IntakeArmPosition.BOTTOM.value);
+        motor.getEncoder().setPosition(IntakeArmPosition.TOP.value);
         initialized = true;
     }
 
@@ -121,7 +122,7 @@ public class IntakeArm extends SubsystemBase {
     public Command testSetVoltage(double voltage){
         return Commands.sequence(
             Commands.runOnce(() -> motor.setVoltage(voltage), this)
-        ).finallyDo(() -> motor.setVoltage(0));
+        );
     }
 
     public Command moveToCurrentGoalCommand() {
@@ -136,7 +137,7 @@ public class IntakeArm extends SubsystemBase {
 
     public Command moveToPositionCommand(Supplier<IntakeArmPosition> goalPositionSupplier) {
         return Commands.sequence(
-                runOnce(() -> pidController.reset(getPosition())),
+                // runOnce(() -> pidController.reset(getPosition())),
                 runOnce(() -> pidController.setGoal(goalPositionSupplier.get().value)),
                 moveToCurrentGoalCommand()
                         .until(() -> pidController.atGoal()))

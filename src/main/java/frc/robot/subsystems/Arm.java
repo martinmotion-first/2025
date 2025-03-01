@@ -115,7 +115,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
 
         positionTracker.setArmAngleSupplier(this::getPosition);
 
-        setDefaultCommand(moveToCurrentGoalCommand());
+        // setDefaultCommand(moveToCurrentGoalCommand());
         resetPosition();
     }
 
@@ -151,28 +151,29 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
     }
 
     public double getVelocity() {
-        if (RobotBase.isReal())
-            return motor.getEncoder().getVelocity();
-        else
-            return simVelocity;
+        return motor.getEncoder().getVelocity();
     }
 
     @Override
     public void resetPosition() {
-        motor.getEncoder().setPosition(ArmPosition.TOP.value);
+        // motor.getEncoder().setPosition(ArmPosition.TOP.value);
         initialized = true;
     }
 
     @Override
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -12, 12);
-        voltage = Utils.applySoftStops(voltage, getPosition(), ArmPosition.BOTTOM.value, ArmPosition.TOP.value);
+        // voltage = Utils.applySoftStops(voltage, getPosition(), ArmPosition.BOTTOM.value, ArmPosition.TOP.value);
 
-        if (getPosition() > Constants.Arm.MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT
-                && positionTracker.getElevatorPosition() < Constants.Elevator.MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION) {
-            System.out.println("Arm safety break fired");
-            voltage = 0;
-        }
+        // if (getPosition() > Constants.Arm.MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT
+        //         && positionTracker.getElevatorPosition() < Constants.Elevator.MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION) {
+        //     System.out.println("Arm safety break fired");
+        //     voltage = 0;
+        // }
+
+        // if (!GlobalStates.INITIALIZED.enabled()) {
+        //     voltage = 0.0;
+        // }
 
         motor.setVoltage(voltage);
     }
@@ -195,7 +196,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 runOnce(() -> pidController.setGoal(goalPositionSupplier.get().value)),
                 moveToCurrentGoalCommand()
                         .until(() -> pidController.atGoal()))
-                .withTimeout(3)
+                // .withTimeout(3)
                 .withName("arm.moveToPosition");
     }
 
@@ -264,7 +265,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
 
     public Command testSetVoltage(double voltage){
         return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this)
-        ).finallyDo(() -> motor.setVoltage(0));
+            Commands.run(() -> motor.setVoltage(voltage), this)
+        );
     }
 }

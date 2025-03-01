@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.rusthounds_util.CoralSim;
 import frc.robot.rusthounds_util.ScoreLevel;
 import frc.robot.rusthounds_util.GlobalStates;
+import frc.robot.Constants.Arm.ArmPosition;
+import frc.robot.Constants.Elevator.ElevatorPosition;
+import frc.robot.Constants.IntakeArm.IntakeArmPosition;
 import frc.robot.commands.RobotCommands;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -52,23 +55,62 @@ public class OperatorMapping6237MR {
 
         controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber, intakeArm));
 
-        controller.x().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm));
-        controller.y().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm));
+        // controller.x().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));
+        // controller.y().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));
 
-        controller.povLeft().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm));
-        controller.povRight().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm));
+        // controller.povLeft().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm));
+        // controller.povRight().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm));
 
-        controller.povDown().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator));
-        controller.povUp().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator));
+        // controller.povRight().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.povLeft().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.a().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.b().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
 
-        controller.rightBumper().whileTrue(intake.runRollersCommand());
-        controller.leftBumper().whileTrue(intake.reverseRollersCommand());
+        controller.povLeft().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        controller.povRight().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.x().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.y().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.a().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        // controller.b().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+
+        //CONFIRMED - intake arm positions
+        // controller.x().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));
+        // controller.y().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));
+        // controller.b().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.BOTTOM));
+        // controller.leftBumper().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));
+        // controller.rightBumper().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));
+        //END CONFIRMED
+
+        //NOT CONFIRMED - elevator positions
+        // controller.x().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L1));
+        // controller.y().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L2));
+        // controller.b().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L3));
+        // controller.a().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L4));
+        // controller.leftBumper().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.rightBumper().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        //NOT CONFIRMED
+
+        //(MOSTLY) CONFIRMED, leaving off here - arm positions
+        controller.x().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.BOTTOM));
+        controller.y().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.HORIZONTAL));
+        controller.b().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L2));
+        controller.a().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L3));
+        controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        controller.leftTrigger().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        controller.rightTrigger().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        //NOT CONFIRMED
+
+        // controller.rightBumper().whileTrue(intake.runRollersCommand());
+        // controller.leftBumper().whileTrue(intake.reverseRollersCommand());
+
+
         
-        climber.setDefaultCommand(Commands
-        .run(() -> climber.setVoltage(MathUtil
-                        .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 4,
-                                0.1)),
-                        climber));
+        // climber.setDefaultCommand(Commands
+        // .run(() -> climber.setVoltage(MathUtil
+        //                 .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 4,
+        //                         0.1)),
+        //                 climber));
         
     }
 }

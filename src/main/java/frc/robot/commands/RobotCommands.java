@@ -141,12 +141,24 @@ public class RobotCommands {
     public static Command elevatorOnlyMoveToL3(Elevator elevator, Arm arm, CoralSim coralSim) {
         return elevator.moveToPositionCommand(() -> ElevatorPosition.ALGAE_L3);
     }
+    public static Command elevatorOnlyMoveToPosition(Elevator elevator, ElevatorPosition position) {
+        return elevator.moveToPositionCommand(() -> position);
+    }
+    public static Command armOnlyMoveToPosition(Arm arm, ArmPosition position) {
+        return arm.moveToPositionCommand(() -> position);
+    }
 
     public static Command intakeArmGivePositiveVoltage(IntakeArm intakeArm) {
         return intakeArm.testSetVoltage(1);
     }
     public static Command intakeArmGiveNegativeVoltage(IntakeArm intakeArm) {
         return intakeArm.testSetVoltage(-1);
+    }
+    public static Command intakeArmGiveZeroVoltage(IntakeArm intakeArm) {
+        return intakeArm.testSetVoltage(0);
+    }
+    public static Command intakeArmMoveToPosition(IntakeArm intakeArm, IntakeArmPosition position) {
+        return intakeArm.moveToPositionCommand(() -> position);
     }
 
     public static Command elevatorOnlyGivePositiveVoltage(Elevator elevator){
@@ -167,6 +179,10 @@ public class RobotCommands {
 
     public static Command armOnlyGiveNegativeVoltage(Arm arm){
         return arm.testSetVoltage(-2);
+    }
+
+    public static Command armOnlyGiveZeroVoltage(Arm arm){
+        return arm.testSetVoltage(0);
     }
 
     public static Command kill(Elevator elevator, Arm arm, Intake intake, Climber climber, IntakeArm intakeArm){

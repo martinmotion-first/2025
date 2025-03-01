@@ -166,20 +166,20 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
 
     @Override
     public void resetPosition() {
-        motor.getEncoder().setPosition(ElevatorPosition.BOTTOM.value);
+        // motor.getEncoder().setPosition(ElevatorPosition.BOTTOM.value);
         initialized = true;
     }
 
     @Override
     public void setVoltage(double voltage) {
         voltage = MathUtil.clamp(voltage, -12, 12);
-        voltage = Utils.applySoftStops(voltage, getPosition(), ElevatorPosition.TOP.value, ElevatorPosition.BOTTOM.value); //TOP value is negative, so is minimum
+        // voltage = Utils.applySoftStops(voltage, getPosition(), ElevatorPosition.TOP.value, ElevatorPosition.BOTTOM.value); //TOP value is negative, so is minimum
 
-        if (positionTracker.getElevatorPosition() < Constants.Elevator.MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION
-                && positionTracker.getArmAngle() > Constants.Arm.MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT) {
-            System.out.println("Elevator safety break fired");
-            voltage = 0;
-        }
+        // if (positionTracker.getElevatorPosition() < Constants.Elevator.MIN_HEIGHT_TO_ALLOW_ARM_EXTENSION
+        //         && positionTracker.getArmAngle() > Constants.Arm.MAX_ARM_EXTENSION_TO_ALLOW_ELEVATOR_DESCENT) {
+        //     System.out.println("Elevator safety break fired");
+        //     voltage = 0;
+        // }
 
         motor.setVoltage(voltage);
 
@@ -187,8 +187,8 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
 
     public Command testSetVoltage(double voltage){
         return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this)
-        ).finallyDo(() -> motor.setVoltage(0));
+            Commands.run(() -> motor.setVoltage(voltage), this)
+        );
     }
 
     @Override
