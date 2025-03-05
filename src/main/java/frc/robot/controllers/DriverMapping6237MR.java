@@ -32,7 +32,7 @@ public class DriverMapping6237MR {
 
         /* Setting up bindings for necessary control of the swerve drive platform */
     private static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(Constants.Swerve.MaxSpeed * Constants.stickDeadband).withRotationalDeadband(Constants.Swerve.MaxAngularRate * Constants.stickDeadband)
+            .withDeadband(Constants.Swerve.MaxSpeed * Constants.driverStickDeadband).withRotationalDeadband(Constants.Swerve.MaxAngularRate * Constants.driverStickDeadband)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private static final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private static final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();

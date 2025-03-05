@@ -200,6 +200,16 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 .withName("arm.moveToPosition");
     }
 
+    public Command moveToPositionCommandAlternate(ArmPosition armPosition) {
+        return Commands.sequence(
+                runOnce(() -> pidController.reset(getPosition())),
+                runOnce(() -> pidController.setGoal(armPosition.value)),
+                moveToCurrentGoalCommand()
+                        .until(() -> pidController.atGoal()))
+                // .withTimeout(3)
+                .withName("arm.moveToPosition");
+    }
+
     @Override
     public Command moveToArbitraryPositionCommand(Supplier<Double> goalPositionSupplier) {
         return Commands.sequence(

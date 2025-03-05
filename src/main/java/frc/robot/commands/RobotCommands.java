@@ -142,8 +142,30 @@ public class RobotCommands {
         return elevator.moveToPositionCommand(() -> ElevatorPosition.ALGAE_L3);
     }
     public static Command elevatorOnlyMoveToPosition(Elevator elevator, ElevatorPosition position) {
-        return elevator.moveToPositionCommand(() -> position);
+        return Commands.sequence(
+            elevator.moveToPositionCommand(() -> position).asProxy(),
+            elevator.holdCurrentPositionCommand()
+            // elevator.testSetVoltage(0)
+        );
     }
+    public static Command elevatorCombinedCommand(Elevator elevator, Arm arm, ElevatorPosition elevatorPosition) {
+        ArmPosition armPosition = null;
+        if(elevatorPosition == ElevatorPosition.L3){
+            armPosition = ArmPosition.HORIZONTAL;
+        }
+        else if(elevatorPosition == ElevatorPosition.L2 || elevatorPosition == ElevatorPosition.L3){
+            armPosition = ArmPosition.BOTTOM;
+        }else if (elevatorPosition == ElevatorPosition.TOP){
+            armPosition = ArmPosition.L3;
+        }else{
+            armPosition = ArmPosition.BOTTOM;
+        }
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        );
+    }
+
     public static Command armOnlyMoveToPosition(Arm arm, ArmPosition position) {
         return arm.moveToPositionCommand(() -> position);
     }

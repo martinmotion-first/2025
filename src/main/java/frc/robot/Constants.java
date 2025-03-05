@@ -23,7 +23,8 @@ import edu.wpi.first.math.util.Units;
  */
 
  public final class Constants {
-  public static final double stickDeadband = 0.2;
+  public static final double driverStickDeadband = 0.2;
+  public static final double operatorStickDeadband = 0.2;
   public static final double kTriggerButtonThreshold = 0.3;
 
   public static final int kXboxDriverPort = 0;
@@ -54,6 +55,7 @@ import edu.wpi.first.math.util.Units;
             // L4(1.27),
             // TOP(1.57);
             BOTTOM(-0.007),
+            ARM_FREE(-0.085),
             INTAKE_PREP(-.154),
             INTAKE(-.063),
             ALGAE_L2(-.308),
@@ -103,8 +105,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 1.0; // TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 1; // TODO HERE!!! (tuning way down for intial attempt (from 1.3))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1; // TODO HERE!!! (tuning way down for intial attempt (from 3))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = .5; // TODO HERE!!! (tuning way down for intial attempt (from 1.3))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .5; // TODO HERE!!! (tuning way down for intial attempt (from 3))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
@@ -170,8 +172,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 0.206676;// TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = .1; // TODO HERE!!! (tuning way down for intial attempt (from 8))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .1; // TODO HERE!!! (tuning way down for intial attempt (from 4))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 2; // TODO HERE!!! (tuning way down for intial attempt (from 8))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2; // TODO HERE!!! (tuning way down for intial attempt (from 4))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }

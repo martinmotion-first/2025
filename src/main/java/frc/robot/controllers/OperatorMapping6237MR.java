@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.rusthounds_util.CoralSim;
 import frc.robot.rusthounds_util.ScoreLevel;
 import frc.robot.rusthounds_util.GlobalStates;
+import frc.robot.Constants;
 import frc.robot.Constants.Arm.ArmPosition;
 import frc.robot.Constants.Elevator.ElevatorPosition;
 import frc.robot.Constants.IntakeArm.IntakeArmPosition;
@@ -39,8 +40,9 @@ public class OperatorMapping6237MR {
         // controller.rightBumper().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm));
         // controller.leftBumper().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm));
 
-        controller.rightBumper().whileTrue(RobotCommands.intakeAlgaeCommand(intakeArm, intake));
-        controller.leftBumper().whileTrue(RobotCommands.scoreAlgaeCommand(intakeArm, intake));
+        //REMOVING BECUASE OF ROBOT LOCATION
+        // controller.rightBumper().whileTrue(RobotCommands.intakeAlgaeCommand(intakeArm, intake));
+        // controller.leftBumper().whileTrue(RobotCommands.scoreAlgaeCommand(intakeArm, intake));
         
         climber.setDefaultCommand(Commands
         .run(() -> climber.setVoltage(MathUtil
@@ -66,8 +68,8 @@ public class OperatorMapping6237MR {
         // controller.a().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         // controller.b().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
 
-        controller.povLeft().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
-        controller.povRight().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.povLeft().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.povRight().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         // controller.x().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         // controller.y().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         // controller.a().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
@@ -91,16 +93,31 @@ public class OperatorMapping6237MR {
         //NOT CONFIRMED
 
         //(MOSTLY) CONFIRMED, leaving off here - arm positions
-        controller.x().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.BOTTOM));
-        controller.y().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.HORIZONTAL));
-        controller.b().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L2));
-        controller.a().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L3));
+        // controller.x().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.BOTTOM));
+        // controller.y().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.HORIZONTAL));
+        // controller.b().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L2));
+        // controller.a().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L3));
         controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
         controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
         controller.leftTrigger().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         controller.rightTrigger().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
-        //NOT CONFIRMED
 
+
+        //NOT CONFIRMED
+        // controller.x().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L1));
+        // controller.y().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L2));
+        // controller.b().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L3));
+        // controller.a().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L4));
+        // controller.axisLessThan(1, Constants.operatorStickDeadband).onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L1));  //1 is leftStick Y axis, up is negactive
+        // controller.axisGreaterThan(1,  Constants.operatorStickDeadband).onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L2)); 
+        // controller.axisLessThan(0,  Constants.operatorStickDeadband).onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.ARM_FREE)); //0 is leftStick X axis, left is negative
+        // controller.axisGreaterThan(0,  Constants.operatorStickDeadband).onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.TOP));
+
+        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP));
+        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));
+        // controller.x().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.HORIZONTAL));
+        controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
+        controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
         // controller.rightBumper().whileTrue(intake.runRollersCommand());
         // controller.leftBumper().whileTrue(intake.reverseRollersCommand());
 
@@ -113,4 +130,45 @@ public class OperatorMapping6237MR {
         //                 climber));
         
     }
+
+    // NOTES
+    /* 
+     *         
+     *  // Left Stick
+     *  // Up (Negative Y-Axis)
+        driverController.axisLessThan(1, -0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Up")));
+
+        // Down (Positive Y-Axis)
+        driverController.axisGreaterThan(1, 0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Down")));
+
+        // Left (Negative X-Axis)
+        driverController.axisLessThan(0, -0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Left")));
+
+        // Right (Positive X-Axis)
+        driverController.axisGreaterThan(0, 0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Right")));
+     *
+     * 
+     * 
+     * 
+     * // RIght Stick
+     *         // Right Stick Up (Negative Y-Axis)
+        driverController.axisLessThan(5, -0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Right Stick Up")));
+
+        // Right Stick Down (Positive Y-Axis)
+        driverController.axisGreaterThan(5, 0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Right Stick Down")));
+
+        // Right Stick Left (Negative X-Axis)
+        driverController.axisLessThan(4, -0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Right Stick Left")));
+
+        // Right Stick Right (Positive X-Axis)
+        driverController.axisGreaterThan(4, 0.2)
+            .onTrue(new InstantCommand(() -> activateCommand("Right Stick Right"))); 
+    */
 }

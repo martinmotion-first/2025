@@ -203,7 +203,7 @@ public class Elevator extends SubsystemBase implements BaseLinearMechanism<Eleva
     @Override
     public Command moveToPositionCommand(Supplier<ElevatorPosition> goalPositionSupplier) {
         return Commands.sequence(
-                runOnce(() -> pidController.reset(getPosition())),
+                // runOnce(() -> pidController.reset(getPosition())),
                 runOnce(() -> pidController.setGoal(goalPositionSupplier.get().value)),
                 moveToCurrentGoalCommand()
                         .until(() -> pidController.atGoal()))
