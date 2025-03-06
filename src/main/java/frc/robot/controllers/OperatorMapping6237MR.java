@@ -23,26 +23,27 @@ public class OperatorMapping6237MR {
     Climber climber, IntakeArm intakeArm, CoralSim coralSim) {
         
         controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber, intakeArm));
-        controller.a().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L1, elevator, arm, coralSim));
-        controller.x().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
-        controller.b().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
-        controller.y().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
-        controller.start().whileTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
+        // controller.a().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L1, elevator, arm, coralSim));
+        // controller.x().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
+        // controller.b().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
+        // controller.y().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
+        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP));
+        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));
+        controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
+        controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
 
-        controller.povUp().whileTrue(RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
-        controller.povDown().whileTrue(RobotCommands.intakeCoralCommand(elevator, arm, coralSim));
-
-        controller.povLeft().whileTrue(RobotCommands.prepareAlgaeL2RemoveCommand(elevator, arm));
-        controller.povRight().whileTrue(RobotCommands.prepareAlgaeL3RemoveCommand(elevator, arm));
-        controller.leftStick().whileTrue(RobotCommands.algaeRemoveCommand(elevator, arm));
+        controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));       // Right Stick Up (Negative Y-Axis)
+        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
         
-        //TEMP TEMP TEMP
-        // controller.rightBumper().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm));
-        // controller.leftBumper().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm));
+        // controller.start().whileTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
+        // controller.povUp().whileTrue(RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
+        // controller.povDown().whileTrue(RobotCommands.intakeCoralCommand(elevator, arm, coralSim));
+        // controller.povLeft().whileTrue(RobotCommands.prepareAlgaeL2RemoveCommand(elevator, arm));
+        // controller.povRight().whileTrue(RobotCommands.prepareAlgaeL3RemoveCommand(elevator, arm));
+        // controller.leftStick().whileTrue(RobotCommands.algaeRemoveCommand(elevator, arm));
 
-        //REMOVING BECUASE OF ROBOT LOCATION
-        // controller.rightBumper().whileTrue(RobotCommands.intakeAlgaeCommand(intakeArm, intake));
-        // controller.leftBumper().whileTrue(RobotCommands.scoreAlgaeCommand(intakeArm, intake));
         
         climber.setDefaultCommand(Commands
         .run(() -> climber.setVoltage(MathUtil
@@ -97,13 +98,14 @@ public class OperatorMapping6237MR {
         // controller.y().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.HORIZONTAL));
         // controller.b().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L2));
         // controller.a().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L3));
-        controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
-        controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
-        controller.leftTrigger().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
-        controller.rightTrigger().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.leftTrigger().whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        // controller.rightTrigger().whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
 
 
-        //NOT CONFIRMED
+        controller.axisLessThan(0, -0.2).onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L2));       // Left Stick Left (Negative Y-Axis)
+        controller.axisGreaterThan(0, 0.2).onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L3));   // Left Stick Right (Positive Y-Axis)
+        controller.axisLessThan(1, -0.2).onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L2));       //Left Stick Up
+        controller.axisGreaterThan(1, 0.2).onTrue(RobotCommands.intakeCoralCommand(elevator, arm, coralSim));       //Left Stick Up
         // controller.x().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L1));
         // controller.y().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L2));
         // controller.b().onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.L3));
@@ -113,22 +115,38 @@ public class OperatorMapping6237MR {
         // controller.axisLessThan(0,  Constants.operatorStickDeadband).onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.ARM_FREE)); //0 is leftStick X axis, left is negative
         // controller.axisGreaterThan(0,  Constants.operatorStickDeadband).onTrue(RobotCommands.elevatorOnlyMoveToPosition(elevator, ElevatorPosition.TOP));
 
-        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP));
-        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));
-        // controller.x().onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.HORIZONTAL));
+
+        controller.start().onTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
+        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP)); //TEMP TEMP
+        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));  //TEMP TEMP
         controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
         controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
-        // controller.rightBumper().whileTrue(intake.runRollersCommand());
-        // controller.leftBumper().whileTrue(intake.reverseRollersCommand());
+
+        // controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        // controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        controller.rightBumper().whileTrue(intake.runRollersCommand());
+        controller.leftBumper().whileTrue(intake.reverseRollersCommand());
 
 
+
+        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));       // Right Stick Up (Negative Y-Axis)
+        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
+        // controller.axisLessThan(5, -0.2).onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));       // Right Stick Up (Negative Y-Axis)
+        // controller.axisGreaterThan(5, 0.2).onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));       // Right Stick Down (Positive Y-Axis)
+        // controller.x().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP 
+        // controller.y().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP
+        // controller.x().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));  //TEMP TEMP 
+        // controller.y().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));   //TEMP TEMP
         
-        // climber.setDefaultCommand(Commands
-        // .run(() -> climber.setVoltage(MathUtil
-        //                 .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 4,
-        //                         0.1)),
-        //                 climber));
+        controller.axisLessThan(4, -0.2).whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        controller.axisGreaterThan(4, 0.2).whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         
+
+        climber.setDefaultCommand(Commands
+        .run(() -> climber.setVoltage(MathUtil
+                        .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 4,
+                                0.1)),
+                        climber));
     }
 
     // NOTES

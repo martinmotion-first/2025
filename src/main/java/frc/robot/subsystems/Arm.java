@@ -189,6 +189,16 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
         }).withName("arm.moveToCurrentGoal");
     }
 
+    public Command moveToCurrentGoalForScoreDoubleSpeed() {
+        return run(() -> {
+            feedbackVoltage = pidController.calculate(getPosition());
+            // not the setpoint position, as smart people found that using the current
+            // position for kG works best
+            feedforwardVoltage = feedforwardController.calculate(getPosition(), pidController.getSetpoint().velocity * 2);
+            setVoltage(feedbackVoltage + feedforwardVoltage);
+        }).withName("arm.moveToCurrentGoal");
+    }
+
     @Override
     public Command moveToPositionCommand(Supplier<ArmPosition> goalPositionSupplier) {
         return Commands.sequence(
@@ -207,7 +217,17 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 moveToCurrentGoalCommand()
                         .until(() -> pidController.atGoal()))
                 // .withTimeout(3)
-                .withName("arm.moveToPosition");
+                .withName("arm.moveToPositionCommandAlternate");
+    }
+
+    public Command moveToScoreCoral(ArmPosition armPosition) {
+        return Commands.sequence(
+                runOnce(() -> pidController.reset(getPosition())),
+                runOnce(() -> pidController.setGoal(armPosition.value)),
+                moveToCurrentGoalForScoreDoubleSpeed()
+                        .until(() -> pidController.atGoal()))
+                // .withTimeout(3)
+                .withName("arm.moveToPositionCommandAlternate");
     }
 
     @Override

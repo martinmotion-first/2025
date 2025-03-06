@@ -32,6 +32,9 @@ import edu.wpi.first.math.util.Units;
   public static final int kXboxOperatorManualOnlyPort = 2;
 
   public static final String kLimelightName = "";
+  public static final double kSafeElevatorInitialDelay = .9;
+  public static final double kSafeElevatorWaitTime = .8;
+  public static final double kArmPositionSafeLowerLimit = 1;
   
   public static final class Swerve {
       public static final int pigeonID = 8;
@@ -59,11 +62,11 @@ import edu.wpi.first.math.util.Units;
             INTAKE_PREP(-.154),
             INTAKE(-.063),
             ALGAE_L2(-.308),
-            ALGAE_L3(-.4732),
+            ALGAE_L3(-.56),
 
             L1(-.047),
-            L2(-.042),
-            L3(-.224),
+            L2(-.058), //altering for measurements
+            L3(-.3915), //altering for measurements
             L4(-.49),
             TOP(-.63);
 
@@ -130,12 +133,13 @@ import edu.wpi.first.math.util.Units;
             // TOP(3.379);
 
             BOTTOM(0),
+            ALGAE(.4),
             HORIZONTAL(1.3),
             L1(1.3),
-            L2(Units.degreesToRadians(115)), 
-            L3(Units.degreesToRadians(115)),
-            L4(Units.degreesToRadians(160)),
-            TOP(2.5);
+            L2(2.2), //alterting fro actual reef
+            L3(2.2), //altering for actual reef
+            L4(2.4),//bumping down for now since we're not actually trying it
+            TOP(2.4); //bumping down for now since we're not actually trying it
 
             public final double value;
 

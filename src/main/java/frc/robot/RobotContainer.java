@@ -136,7 +136,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // DriverMapping6237MR.mapXboxController(driver, drivetrain);
+    DriverMapping6237MR.mapXboxController(driver, drivetrain);
     OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
     OperatorMapping6237MR.mapXboxControllerManualOnlyControl(operatorAlterante, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
   }

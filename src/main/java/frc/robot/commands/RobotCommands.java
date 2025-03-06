@@ -92,40 +92,41 @@ public class RobotCommands {
     }
 
     public static Command scoreCoralCommand(CommandSwerveDrivetrain drivetrain, Elevator elevator, Arm arm, CoralSim coralSim) { //Drivetrain drivetrain, 
-        Map<ScoreLevel, Command> commandMap = Map.ofEntries(
-                Map.entry(
-                        ScoreLevel.L1, Commands.parallel(
-                                // drivetrain.moveVoltageTimeCommand(4, 0.5),
-                                elevator.movePositionDeltaCommand(() -> Constants.Elevator.SCORING_MOVEMENT)
-                                        .asProxy())),
-                Map.entry(
-                        ScoreLevel.L2,
-                        Commands.parallel(
-                                arm.movePositionDeltaCommand(() -> Constants.Arm.SCORING_MOVEMENT).asProxy())),
-                Map.entry(
-                        ScoreLevel.L3,
-                        Commands.parallel(
-                                arm.movePositionDeltaCommand(() -> Constants.Arm.SCORING_MOVEMENT).asProxy())),
-                Map.entry(
-                        ScoreLevel.L4,
-                        Commands.parallel(
-                                arm.movePositionDeltaCommand(() -> Constants.Arm.SCORING_MOVEMENT).asProxy(),
-                                Commands.waitSeconds(0.5)
-                                        .andThen(
-                                                elevator.movePositionDeltaCommand(
-                                                        () -> Constants.Elevator.SCORING_MOVEMENT))
-                                        .asProxy())),
-                Map.entry(
-                        ScoreLevel.None,
-                        Commands.none()));
+        // Map<ScoreLevel, Command> commandMap = Map.ofEntries(
+        //         Map.entry(
+        //                 ScoreLevel.L1, Commands.parallel(
+        //                         // drivetrain.moveVoltageTimeCommand(4, 0.5),
+        //                         elevator.movePositionDeltaCommand(() -> Constants.Elevator.SCORING_MOVEMENT)
+        //                                 .asProxy())),
+        //         Map.entry(
+        //                 ScoreLevel.L2,
+        //                 Commands.parallel(
+        //                         arm.movePositionDeltaCommand(() -> Constants.Arm.SCORING_MOVEMENT).asProxy())),
+        //         Map.entry(
+        //                 ScoreLevel.L3,
+        //                 Commands.parallel(
+        //                         arm.movePositionDeltaCommand(() -> Constants.Arm.SCORING_MOVEMENT).asProxy())),
+        //         Map.entry(
+        //                 ScoreLevel.L4,
+        //                 Commands.parallel(
+        //                         arm.movePositionDeltaCommand(() -> Constants.Arm.SCORING_MOVEMENT).asProxy(),
+        //                         Commands.waitSeconds(0.5)
+        //                                 .andThen(
+        //                                         elevator.movePositionDeltaCommand(
+        //                                                 () -> Constants.Elevator.SCORING_MOVEMENT))
+        //                                 .asProxy())),
+        //         Map.entry(
+        //                 ScoreLevel.None,
+        //                 Commands.none()));
 
-        return Commands.select(commandMap, () -> lastScore);
+        // return Commands.select(commandMap, () -> lastScore);
+        return arm.moveToScoreCoral(ArmPosition.HORIZONTAL);
     }
 
     public static Command prepareIntakeCoralCommand(Elevator elevator, Arm arm, CoralSim coralSim) {
         System.out.println("In prepareIntakeCoralCommand");
         return Commands.sequence(
-                Commands.parallel(elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE_PREP).asProxy(),
+                Commands.parallel(elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()));
     }
 
@@ -149,21 +150,43 @@ public class RobotCommands {
         );
     }
     public static Command elevatorCombinedCommand(Elevator elevator, Arm arm, ElevatorPosition elevatorPosition) {
+        // System.out.println("********************************** IN ELEVATOR COMBINED COMMAND ****************************");
+        // System.out.println("Elevator detected curren position before moving: " + elevator.getPosition());
+        // System.out.println("********************************** END COMBINED COMMAND ****************************");
         ArmPosition armPosition = null;
         if(elevatorPosition == ElevatorPosition.L3){
-            armPosition = ArmPosition.HORIZONTAL;
-        }
-        else if(elevatorPosition == ElevatorPosition.L2 || elevatorPosition == ElevatorPosition.L3){
-            armPosition = ArmPosition.BOTTOM;
-        }else if (elevatorPosition == ElevatorPosition.TOP){
             armPosition = ArmPosition.L3;
-        }else{
+        }
+        else if(elevatorPosition == ElevatorPosition.L2){
+            armPosition = ArmPosition.L2;
+        }else if (elevatorPosition == ElevatorPosition.TOP){
+            armPosition = ArmPosition.TOP;
+        }else if(elevatorPosition == ElevatorPosition.ALGAE_L2 || elevatorPosition == ElevatorPosition.ALGAE_L3){
+            armPosition = ArmPosition.ALGAE;
+        } else{
             armPosition = ArmPosition.BOTTOM;
         }
-        return Commands.parallel(
-            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-            arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        );
+
+        if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
+                                                                        elevatorPosition == ElevatorPosition.L2) 
+                                                                     && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
+            return Commands.sequence(
+                Commands.parallel(
+                    elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
+                    Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
+                ),
+                Commands.parallel(
+                    arm.moveToPositionCommandAlternate(armPosition).asProxy(),
+                    Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
+                )  
+            );
+        }else{
+            return Commands.parallel(
+                elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+                arm.moveToPositionCommandAlternate(armPosition).asProxy()
+            );
+        }
+
     }
 
     public static Command armOnlyMoveToPosition(Arm arm, ArmPosition position) {
@@ -182,6 +205,22 @@ public class RobotCommands {
     public static Command intakeArmMoveToPosition(IntakeArm intakeArm, IntakeArmPosition position) {
         return intakeArm.moveToPositionCommand(() -> position);
     }
+    // public static Command intakeArmIntakeAlgae(IntakeArm intakeArm, Intake intake) {
+    //     return Commands.sequence(
+    //         intakeArm.moveToPositionCommand(() -> IntakeArmPosition.INTERMEDIATE).asProxy(),
+    //         intake.setRollerVoltage(3),
+    //         Commands.waitSeconds(3)).andThen(intake.setRollerVoltage(0))
+    //     );
+    // }
+
+    // public static Command intakeArmScoreAlgae(IntakeArm intakeArm, Intake intake) {
+    //     return Commands.sequence(
+    //             intakeArm.moveToPositionCommand(() -> IntakeArmPosition.INTERMEDIATE),
+    //             intake.setRollerVoltage(-12),
+    //             intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP),
+    //             intake.setRollerVoltage(0)
+    //     );
+    // }
 
     public static Command elevatorOnlyGivePositiveVoltage(Elevator elevator){
         return elevator.testSetVoltage(1);
@@ -220,16 +259,13 @@ public class RobotCommands {
     public static Command intakeCoralCommand(Elevator elevator, Arm arm, CoralSim coralSim) {
         System.out.println("In intakeCoralCommand");
         return Commands.sequence(
-                prepareIntakeCoralCommand(elevator, arm, coralSim),
+                // prepareIntakeCoralCommand(elevator, arm, coralSim),
+                elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE),
                 Commands.parallel(
-                        elevator.moveToPositionCommand(() -> ElevatorPosition.INTAKE).asProxy(),
+                        elevator.moveToPositionCommand(() -> ElevatorPosition.BOTTOM).asProxy(),
                         arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()),
-                elevator.movePositionDeltaCommand(() -> -0.31).asProxy().alongWith(
-                        Commands.waitSeconds(0.1).andThen(coralSim.setLocationCommand(CoralSimLocation.CLAW))),
-                Commands.parallel(
-                        Commands.waitSeconds(0.5)
-                                .andThen(elevator.moveToPositionCommand(() -> ElevatorPosition.BOTTOM).asProxy()),
-                        arm.moveToPositionCommand(() -> ArmPosition.TOP).asProxy()));
+                elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE)
+        );
     }
 
     public static Command intakeIntoScoreCommand(ScoreLevel level, Elevator elevator, Arm arm, CoralSim coralSim) {
@@ -263,22 +299,22 @@ public class RobotCommands {
                         elevator.movePositionDeltaCommand(() -> -0.06).asProxy()));
     }
 
-    public static Command intakeAlgaeCommand(IntakeArm intakeArm, Intake intake){
-        return Commands.sequence(
-            intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP),
-            intake.runRollersCommand(),
-            Commands.waitSeconds(3),
-            Commands.runOnce(() -> intake.setRollerVoltage(0))
-        );
-    }
+    // public static Command intakeAlgaeCommand(IntakeArm intakeArm, Intake intake){
+    //     return Commands.sequence(
+    //         intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP),
+    //         intake.runRollersCommand(),
+    //         Commands.waitSeconds(3),
+    //         Commands.runOnce(() -> intake.setRollerVoltage(0))
+    //     );
+    // }
 
-    public static Command scoreAlgaeCommand(IntakeArm intakeArm, Intake intake){
-        return Commands.sequence(
-            intake.reverseRollersCommand(),
-            intakeArm.moveToPositionCommand(() -> IntakeArmPosition.INTERMEDIATE),
-            Commands.waitSeconds(1.5),
-            Commands.runOnce(() -> intake.setRollerVoltage(0)),
-            intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP)
-        );
-    }
+    // public static Command scoreAlgaeCommand(IntakeArm intakeArm, Intake intake){
+    //     return Commands.sequence(
+    //         intake.reverseRollersCommand(),
+    //         intakeArm.moveToPositionCommand(() -> IntakeArmPosition.INTERMEDIATE),
+    //         Commands.waitSeconds(1.5),
+    //         Commands.runOnce(() -> intake.setRollerVoltage(0)),
+    //         intakeArm.moveToPositionCommand(() -> IntakeArmPosition.TOP)
+    //     );
+    // }
 }
