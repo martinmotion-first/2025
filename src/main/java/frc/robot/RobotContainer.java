@@ -89,7 +89,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    autoChooser = AutoBuilder.buildAutoChooser("3m straight with 90degree rotation");
+    // autoChooser = AutoBuilder.buildAutoChooser("1dot5m straight with 90degree rotation");
+    autoChooser = AutoBuilder.buildAutoChooser("");
     // SmartDashboard.putData("Auto Mode", autoChooser);
     // SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
     // SmartDashboard.putNumber("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder().getAbsolutePosition().getValueAsDouble());

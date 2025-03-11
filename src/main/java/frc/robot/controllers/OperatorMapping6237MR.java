@@ -133,8 +133,8 @@ public class OperatorMapping6237MR {
         controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
         // controller.axisLessThan(5, -0.2).onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));       // Right Stick Up (Negative Y-Axis)
         // controller.axisGreaterThan(5, 0.2).onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));       // Right Stick Down (Positive Y-Axis)
-        // controller.x().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP 
-        // controller.y().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP
+        // controller.x().onTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm));//.onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP 
+        // controller.y().onTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm));//.onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP
         // controller.x().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));  //TEMP TEMP 
         // controller.y().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));   //TEMP TEMP
         

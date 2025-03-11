@@ -86,6 +86,7 @@ public class IntakeArm extends SubsystemBase {
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         resetPosition();
+        pidController.setGoal(IntakeArmPosition.TOP.value);
         setDefaultCommand(moveToCurrentGoalCommand());
     }
 
@@ -109,7 +110,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public void resetPosition() {
-        motor.getEncoder().setPosition(IntakeArmPosition.TOP.value);
+        // motor.getEncoder().setPosition(IntakeArmPosition.TOP.value);
         initialized = true;
     }
 
@@ -121,7 +122,7 @@ public class IntakeArm extends SubsystemBase {
 
     public Command testSetVoltage(double voltage){
         return Commands.sequence(
-            Commands.runOnce(() -> motor.setVoltage(voltage), this)
+            Commands.run(() -> motor.setVoltage(voltage), this)
         );
     }
 

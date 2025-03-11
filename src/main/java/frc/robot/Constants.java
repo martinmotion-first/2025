@@ -41,7 +41,7 @@ import edu.wpi.first.math.util.Units;
       public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
     //new CTRE P6 constants
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRate = RotationsPerSecond.of(0.1).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
   }
 
   public static final class Elevator {
@@ -58,7 +58,8 @@ import edu.wpi.first.math.util.Units;
             // L4(1.27),
             // TOP(1.57);
             BOTTOM(-0.007),
-            ARM_FREE(-0.085),
+            // ARM_FREE(-0.085),
+            ARM_FREE(-0.143952),
             INTAKE_PREP(-.154),
             INTAKE(-.063),
             ALGAE_L2(-.308),
@@ -206,9 +207,10 @@ import edu.wpi.first.math.util.Units;
 
     public static final class IntakeArm {
         public static enum IntakeArmPosition {
-            BOTTOM(4.3),
-            INTERMEDIATE(.2),
-            TOP(0);
+            BOTTOM(4.315958),
+            INTERMEDIATE(2.034556),
+            // TOP(-1.989676),
+            TOP(-0.127160);
 
             public final double value;
 

@@ -120,6 +120,13 @@ public class RobotCommands {
         //                 Commands.none()));
 
         // return Commands.select(commandMap, () -> lastScore);
+
+
+        // return Commands.sequence(
+        //     arm.moveToScoreCoral(ArmPosition.HORIZONTAL),
+        //     drivetrain.
+        // );
+
         return arm.moveToScoreCoral(ArmPosition.HORIZONTAL);
     }
 
