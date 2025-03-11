@@ -253,11 +253,10 @@ public class RobotCommands {
         return arm.testSetVoltage(0);
     }
 
-    public static Command kill(Elevator elevator, Arm arm, Intake intake, Climber climber, IntakeArm intakeArm){
+    public static Command kill(Elevator elevator, Arm arm, Intake intake, Climber climber){
         return Commands.sequence(
             Commands.runOnce(() -> arm.testSetVoltage(0)),
             Commands.runOnce(() -> elevator.testSetVoltage(0)),
-            Commands.runOnce(() -> intakeArm.testSetVoltage(0)),
             Commands.runOnce(() -> climber.setVoltage(0)),
             Commands.runOnce(() -> intake.setRollerVoltage(0))
         );

@@ -84,7 +84,7 @@ public class RobotContainer {
   Intake intake = new Intake();
   Climber climber = new Climber();
   CoralSim coralSim = new CoralSim(() -> drivetrain.getState().Pose, arm::getClawComponentPose);
-  IntakeArm intakeArm = new IntakeArm();
+  // IntakeArm intakeArm = new IntakeArm();
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -138,13 +138,13 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     DriverMapping6237MR.mapXboxController(driver, drivetrain);
-    OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
-    OperatorMapping6237MR.mapXboxControllerManualOnlyControl(operatorAlterante, drivetrain, elevator, arm, intake, climber, intakeArm, coralSim);
+    OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, coralSim);
+    OperatorMapping6237MR.mapXboxControllerManualOnlyControl(operatorAlterante, drivetrain, elevator, arm, intake, climber, coralSim);
   }
 
-  public double getIntakeArmPosition(){
-    return intakeArm.getPosition();
-  }
+  // public double getIntakeArmPosition(){
+  //   return intakeArm.getPosition();
+  // }
 
   public double getElevatorPosition(){
     return elevator.getPosition();

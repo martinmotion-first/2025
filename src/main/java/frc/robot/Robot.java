@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
 
-    SmartDashboard.putNumber("Intake arm position", m_robotContainer.getIntakeArmPosition());
+    // SmartDashboard.putNumber("Intake arm position", m_robotContainer.getIntakeArmPosition());
     // SmartDashboard.putNumber("The actively updated intake arm position absolute", m_robotContainer.getIntakeArmPositionAbsolute()); //this didn't work because the absolute encoder didn't work...
     SmartDashboard.putNumber("Elevator position", m_robotContainer.getElevatorPosition());
     //***** END LimeLight Dashboard ****

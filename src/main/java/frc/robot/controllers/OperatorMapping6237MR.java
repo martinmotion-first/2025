@@ -20,9 +20,9 @@ import frc.robot.subsystems.IntakeArm;
 
 public class OperatorMapping6237MR {
     public static void mapXboxController(CommandXboxController controller, CommandSwerveDrivetrain drivetrain, Elevator elevator, Arm arm, Intake intake,
-    Climber climber, IntakeArm intakeArm, CoralSim coralSim) {
+    Climber climber, CoralSim coralSim) {
         
-        controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber, intakeArm));
+        controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber));
         // controller.a().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L1, elevator, arm, coralSim));
         // controller.x().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
         // controller.b().whileTrue(RobotCommands.prepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
@@ -34,8 +34,8 @@ public class OperatorMapping6237MR {
 
         controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
         controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
-        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));       // Right Stick Up (Negative Y-Axis)
-        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
+        // controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));       // Right Stick Up (Negative Y-Axis)
+        // controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
         
         // controller.start().whileTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
         // controller.povUp().whileTrue(RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
@@ -54,9 +54,9 @@ public class OperatorMapping6237MR {
     }
 
     public static void mapXboxControllerManualOnlyControl(CommandXboxController controller, CommandSwerveDrivetrain drivetrain, Elevator elevator, Arm arm, Intake intake,
-            Climber climber, IntakeArm intakeArm, CoralSim coralSim) {
+            Climber climber, CoralSim coralSim) {
 
-        controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber, intakeArm));
+        controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber));
 
         // controller.x().whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));
         // controller.y().whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));
@@ -129,8 +129,8 @@ public class OperatorMapping6237MR {
 
 
 
-        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));       // Right Stick Up (Negative Y-Axis)
-        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
+        // controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));       // Right Stick Up (Negative Y-Axis)
+        // controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.intakeArmGivePositiveVoltage(intakeArm)).onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));        // Right Stick Down (Positive Y-Axis)
         // controller.axisLessThan(5, -0.2).onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));       // Right Stick Up (Negative Y-Axis)
         // controller.axisGreaterThan(5, 0.2).onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));       // Right Stick Down (Positive Y-Axis)
         // controller.x().onTrue(RobotCommands.intakeArmGiveNegativeVoltage(intakeArm));//.onFalse(RobotCommands.intakeArmGiveZeroVoltage(intakeArm));  //TEMP TEMP 
