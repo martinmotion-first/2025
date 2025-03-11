@@ -1,0 +1,100 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Position 2 to reef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareAlgaeL2RemoveCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "algaeRemoveCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scoreCoralCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Reef front to loader"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareIntakeCoralCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeCoralCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Loader to position 6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "prepareAlgaeL2RemoveCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "algaeRemoveCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scoreCoralCommand"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "autos",
+  "choreoAuto": false
+}

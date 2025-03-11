@@ -3,37 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 3.6464999999999996,
+        "y": 2.5429999999999997
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5,
-        "y": 7.0
+        "x": 2.77875,
+        "y": 3.1182499999999997
+      },
+      "isLocked": false,
+      "linkedName": "Reef 4"
+    },
+    {
+      "anchor": {
+        "x": 2.028,
+        "y": 4.2395
+      },
+      "prevControl": {
+        "x": 1.9519481468220437,
+        "y": 3.1402050313368113
+      },
+      "nextControl": {
+        "x": 2.13525,
+        "y": 5.789750000000001
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 1.365,
+        "y": 6.969499999999999
       },
       "prevControl": {
-        "x": 1.5,
-        "y": 7.0
+        "x": 2.0085,
+        "y": 6.21875
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue Coral Loader"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0
+    "rotation": 125.00000000000001
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 58.00000000000001
   },
   "useDefaultConstraints": true
 }

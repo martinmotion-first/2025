@@ -55,7 +55,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    //HERE!!! note, added
     /** Swerve request to apply during robot-centric path following */
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
@@ -88,41 +87,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
-    // private final SwerveDrivePoseEstimator poseEstimator;
-
-    // public Pose2d getPose() {
-    //     return poseEstimator.getEstimatedPosition();
-    // }
-
-    // public ChassisSpeeds getChassisSpeeds(){
-    //     SwerveModuleState[] swerveStates = new SwerveModuleState[]{
-    //         getModule(0).getTargetState(),
-    //         getModule(1).getTargetState(),
-    //         getModule(2).getTargetState(),
-    //         getModule(3).getTargetState(),
-    //     };
-    //     return getKinematics().toChassisSpeeds(swerveStates);
-    // }
-
-    // public SwerveModulePosition[] getPositions(){
-    //     return new SwerveModulePosition[]{
-    //         getModule(0).getPosition(true),
-    //         getModule(1).getPosition(true),
-    //         getModule(2).getPosition(true),
-    //         getModule(3).getPosition(true)
-    //     };
-    // }
-
-    // public ChassisSpeeds driveWithSpeeds(ChassisSpeeds newSpeeds){
-    //     ApplyRobotSpeeds a = new SwerveRequest.ApplyRobotSpeeds();
-    //     return SwerveRequest.ApplyRobotSpeeds.withSpeeds(newSpeeds).Speeds
-    // }
-
-    // public void updatePoseEstimator() {
-    //     poseEstimator.update(getPigeon2().getRotation2d(), getPositions());
-    // }
-    //end
-
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -138,6 +102,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this
         )
     );
+
+    public void zeroGyro(){
+        this.getPigeon2().setYaw(0);
+    }
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
