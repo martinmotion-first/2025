@@ -94,9 +94,8 @@ public class Robot extends TimedRobot {
 
     double txx = LimelightHelpers.getTX("");
     SmartDashboard.putNumber("TX alt", txx); //these worked...
-    LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 0);
-    LimelightResults lr = LimelightHelpers.getLatestResults(Constants.kLimelightName);
-    lr.getBotPose2d_wpiBlue();
+    // LimelightResults lr = LimelightHelpers.getLatestResults(Constants.kLimelightName);
+    // lr.getBotPose2d_wpiBlue();
 
     //read values periodically
     double x = tx.getDouble(0.0);
@@ -107,6 +106,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putString("Limelight currently selected pipeline index", "" + LimelightHelpers.getCurrentPipelineIndex(Constants.kLimelightName));
 
     // SmartDashboard.putNumber("Intake arm position", m_robotContainer.getIntakeArmPosition());
     // SmartDashboard.putNumber("The actively updated intake arm position absolute", m_robotContainer.getIntakeArmPositionAbsolute()); //this didn't work because the absolute encoder didn't work...
@@ -188,9 +188,9 @@ public class Robot extends TimedRobot {
     //   //END ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
 
     //HERE! WHEN THE CAMERA(S) ARE ADDED
-    // UsbCamera cam = CameraServer.startAutomaticCapture();
-    // cam.setResolution(320, 240);
-    // cam.setFPS(20);
+    UsbCamera cam = CameraServer.startAutomaticCapture();
+    cam.setResolution(320, 240);
+    cam.setFPS(20);
   }
 
 }

@@ -144,7 +144,7 @@ public class OperatorMapping6237MR {
 
         climber.setDefaultCommand(Commands
         .run(() -> climber.setVoltage(MathUtil
-                        .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 4,
+                        .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 8,
                                 0.1)),
                         climber));
     }
