@@ -32,8 +32,8 @@ import edu.wpi.first.math.util.Units;
   public static final int kXboxOperatorManualOnlyPort = 2;
 
   public static final String kLimelightName = "";
-  public static final double kSafeElevatorInitialDelay = .9;
-  public static final double kSafeElevatorWaitTime = .8;
+  public static final double kSafeElevatorInitialDelay = .5;
+  public static final double kSafeElevatorWaitTime = .4;
   public static final double kArmPositionSafeLowerLimit = 1;
   
   public static final class Swerve {
@@ -168,7 +168,7 @@ import edu.wpi.first.math.util.Units;
 
         public static final int CURRENT_LIMIT = 50;
 
-        public static final double kP = 10; // TODO
+        public static final double kP = 13; // TODO
         public static final double kI = 0; // TODO
         public static final double kD = 0; // TODO
         public static final double kS = 0.017964; // TODO

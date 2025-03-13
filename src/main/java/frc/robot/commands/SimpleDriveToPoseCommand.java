@@ -83,15 +83,17 @@ public class SimpleDriveToPoseCommand extends Command {
         m_yController.reset();
         m_rotationController.reset();
         
-        // Log the target pose
-        SmartDashboard.putString("Target Pose", 
-            String.format("X: %.2f, Y: %.2f, Rot: %.2f", 
-                m_targetPose.getX(), m_targetPose.getY(), 
-                m_targetPose.getRotation().getDegrees()));
+ 
     }
     
     @Override
     public void execute() {       
+       // Log the target pose
+       SmartDashboard.putString("Target Pose", 
+       String.format("X: %.2f, Y: %.2f, Rot: %.2f", 
+           m_targetPose.getX(), m_targetPose.getY(), 
+           m_targetPose.getRotation().getDegrees()));
+
             // Get the current robot pose
             Pose2d currentPose = m_drivetrain.getState().Pose;
             
@@ -113,7 +115,8 @@ public class SimpleDriveToPoseCommand extends Command {
             yOutput = Math.max(-m_maxSpeed, Math.min(m_maxSpeed, yOutput));
             rotationOutput = Math.max(-m_maxRotationSpeed, Math.min(m_maxRotationSpeed, rotationOutput));
             
-            if(LimelightHelpers.hasTarget()){ 
+            // if(LimelightHelpers.hasTarget()){ 
+            if(m_targetPose.getX() != 0 && m_targetPose.getY() != 0){
                 // Apply the outputs to the drivetrain
                 m_drivetrain.setControl(
                     m_request
@@ -122,8 +125,9 @@ public class SimpleDriveToPoseCommand extends Command {
                         .withRotationalRate(rotationOutput)
                 );
             }
+            // }
             
-            // Log the errors
+            // // Log the errors
             SmartDashboard.putNumber("Pose X Error", xError);
             SmartDashboard.putNumber("Pose Y Error", yError);
             SmartDashboard.putNumber("Pose Rot Error", rotationError);
