@@ -124,8 +124,8 @@ public class OperatorMapping6237MR {
 
         // controller.rightBumper().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
         // controller.leftBumper().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
-        controller.rightBumper().whileTrue(intake.runRollersCommand());
-        controller.leftBumper().whileTrue(intake.reverseRollersCommand());
+        // controller.rightBumper().whileTrue(intake.runRollersCommand());
+        // controller.leftBumper().whileTrue(intake.reverseRollersCommand());
 
 
 
@@ -138,13 +138,13 @@ public class OperatorMapping6237MR {
         // controller.x().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.TOP));  //TEMP TEMP 
         // controller.y().onTrue(RobotCommands.intakeArmMoveToPosition(intakeArm, IntakeArmPosition.INTERMEDIATE));   //TEMP TEMP
         
-        controller.axisLessThan(4, -0.2).whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
-        controller.axisGreaterThan(4, 0.2).whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
         
 
         climber.setDefaultCommand(Commands
         .run(() -> climber.setVoltage(MathUtil
-                        .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 4,
+                        .applyDeadband((controller.getRightTriggerAxis() - controller.getLeftTriggerAxis()) * 8,
                                 0.1)),
                         climber));
     }

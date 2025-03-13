@@ -75,38 +75,60 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    //**** START LimeLight Dashboard *****
-    //MODDED
-    NetworkTableEntry tx = m_networkTable.getEntry("tx");
-    NetworkTableEntry ty = m_networkTable.getEntry("ty");
-    NetworkTableEntry ta = m_networkTable.getEntry("ta");
-    //END MODDED
+    // // //**** START LimeLight Dashboard *****
+    // // //MODDED
+    // // NetworkTableEntry tx = m_networkTable.getEntry("tx");
+    // // NetworkTableEntry ty = m_networkTable.getEntry("ty");
+    // // NetworkTableEntry ta = m_networkTable.getEntry("ta");
+    // // //END MODDED
 
-    //ORIG
-    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    // //END ORIG
+    // // //ORIG
+    // // // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // // // //END ORIG
 
-    // //ORIG
-    // NetworkTableEntry tx = table.getEntry("tx");
-    // NetworkTableEntry ty = table.getEntry("ty");
-    // NetworkTableEntry ta = table.getEntry("ta");
-    //END ORIG
+    // // // //ORIG
+    // // // NetworkTableEntry tx = table.getEntry("tx");
+    // // // NetworkTableEntry ty = table.getEntry("ty");
+    // // // NetworkTableEntry ta = table.getEntry("ta");
+    // // //END ORIG
 
-    double txx = LimelightHelpers.getTX("");
-    SmartDashboard.putNumber("TX alt", txx); //these worked...
-    LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 0);
-    LimelightResults lr = LimelightHelpers.getLatestResults(Constants.kLimelightName);
-    lr.getBotPose2d_wpiBlue();
+    // // double txx = LimelightHelpers.getTX("");
+    // // SmartDashboard.putNumber("TX alt", txx); //these worked...
+    // // // LimelightResults lr = LimelightHelpers.getLatestResults(Constants.kLimelightName);
+    // // // lr.getBotPose2d_wpiBlue();
 
-    //read values periodically
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
+    // // //read values periodically
+    // // double x = tx.getDouble(0.0);
+    // // double y = ty.getDouble(0.0);
+    // // double area = ta.getDouble(0.0);
 
-    //post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+    // // //post to smart dashboard periodically
+    // // SmartDashboard.putNumber("LimelightX", x);
+    // // SmartDashboard.putNumber("LimelightY", y);
+    // // SmartDashboard.putNumber("LimelightArea", area);
+    // // SmartDashboard.putString("Limelight currently selected pipeline index", "" + LimelightHelpers.getCurrentPipelineIndex(Constants.kLimelightName));
+    // SmartDashboard.putNumber("Limelight TA", LimelightHelpers.getTA(Constants.kLimelightName));
+    // SmartDashboard.putNumber("Limelight TX", LimelightHelpers.getTX(Constants.kLimelightName));
+    // SmartDashboard.putNumber("Limelight TXNC", LimelightHelpers.getTXNC(Constants.kLimelightName));
+    // SmartDashboard.putNumber("Limelight TY", LimelightHelpers.getTY(Constants.kLimelightName));
+    // SmartDashboard.putNumber("Limelight TYNC", LimelightHelpers.getTYNC(Constants.kLimelightName));
+    // SmartDashboard.putBoolean("Limnelight TV", LimelightHelpers.getTV(Constants.kLimelightName));
+    // SmartDashboard.putNumber("Limelight TA", LimelightHelpers.getTA(Constants.kLimelightName));
+
+    // double targetSpaceX = LimelightHelpers.getBotPose3d_TargetSpace(Constants.kLimelightName).toPose2d().getX();
+    // double targetSpaceY = LimelightHelpers.getBotPose3d_TargetSpace(Constants.kLimelightName).toPose2d().getY();
+    // SmartDashboard.putNumber("getBotPose3d_TargetSpace X:", targetSpaceX);
+    // SmartDashboard.putNumber("getBotPose3d_TargetSpace Y:", targetSpaceY);
+
+    // double cameraSpaceX = LimelightHelpers.getTargetPose3d_CameraSpace(Constants.kLimelightName).toPose2d().getX();
+    // double cameraSpaceY = LimelightHelpers.getTargetPose3d_CameraSpace(Constants.kLimelightName).toPose2d().getY();
+    // SmartDashboard.putNumber("getTargetPose3d_CameraSpace X:", cameraSpaceX);
+    // SmartDashboard.putNumber("getTargetPose3d_CameraSpace Y:", cameraSpaceY);
+
+    // double botPose3dX = LimelightHelpers.getBotPose3d(Constants.kLimelightName).toPose2d().getX();
+    // double botPose3dY = LimelightHelpers.getBotPose3d(Constants.kLimelightName).toPose2d().getY();
+    // SmartDashboard.putNumber("getBotPose3d X:", botPose3dX);
+    // SmartDashboard.putNumber("getBotPose3d Y:", botPose3dY);
 
     // SmartDashboard.putNumber("Intake arm position", m_robotContainer.getIntakeArmPosition());
     // SmartDashboard.putNumber("The actively updated intake arm position absolute", m_robotContainer.getIntakeArmPositionAbsolute()); //this didn't work because the absolute encoder didn't work...
@@ -188,9 +210,9 @@ public class Robot extends TimedRobot {
     //   //END ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
 
     //HERE! WHEN THE CAMERA(S) ARE ADDED
-    // UsbCamera cam = CameraServer.startAutomaticCapture();
-    // cam.setResolution(320, 240);
-    // cam.setFPS(20);
+    UsbCamera cam = CameraServer.startAutomaticCapture();
+    cam.setResolution(320, 240);
+    cam.setFPS(20);
   }
 
 }

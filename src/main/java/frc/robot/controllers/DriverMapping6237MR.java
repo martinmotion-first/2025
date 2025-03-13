@@ -4,15 +4,21 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
 import frc.robot.Telemetry;
+import frc.robot.commands.SimpleDriveToPoseCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.limelightlib.LimelightHelpers;
+import frc.robot.limelightlib.LimelightHelpers.LimelightTarget_Retro;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class DriverMapping6237MR {
@@ -43,22 +49,23 @@ public class DriverMapping6237MR {
 
     private static double invertXNumber = -1.0;
     private static double invertYNumber = -1.0;
+    private static NetworkTable limelight;
 
-    public static void mapXboxController(CommandXboxController driverController, CommandSwerveDrivetrain drivetrain) {
+    public static void mapXboxController(CommandXboxController driverController, CommandSwerveDrivetrain drivetrain, NetworkTable limelight) {
         // robotCentric = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
         // invertFrontAndBackButton = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
         //switching for Rachel
         robotCentric = new Trigger(() -> driverController.getLeftTriggerAxis() > Constants.kTriggerButtonThreshold);
         invertFrontAndBackButton = new Trigger(() -> driverController.getRightTriggerAxis() > Constants.kTriggerButtonThreshold);
 
+        Command defaultDrivetrainCommand = drivetrain.applyRequest(() ->
+            drive.withVelocityX(invertXNumber * joystick.getLeftY() * Constants.Swerve.MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(invertYNumber * joystick.getLeftX() * Constants.Swerve.MaxSpeed) // Drive left with negative X (left)
+                .withRotationalRate(-1 * joystick.getRightX() * Constants.Swerve.MaxAngularRate)); // Drive counterclockwise with negative X (left)
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(invertXNumber * joystick.getLeftY() * Constants.Swerve.MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(invertYNumber * joystick.getLeftX() * Constants.Swerve.MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-1 * joystick.getRightX() * Constants.Swerve.MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
+            defaultDrivetrainCommand
         );
 
         // driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -75,9 +82,36 @@ public class DriverMapping6237MR {
         // driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         // driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
+        
         driverController.y().debounce(1.0).onTrue(new InstantCommand(() -> drivetrain.zeroGyro()));
         driverController.leftBumper().debounce(1.0).onTrue(new InstantCommand(() -> invertXNumber *= -1.0));
         driverController.rightBumper().debounce(1.0).onTrue(new InstantCommand(() -> invertYNumber *= -1.0));
+        
+        
+        // driverController.a().onTrue(new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)));
+        
+        // driverController.a().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName), 1));
+        // driverController.b().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName), 2));
+        // driverController.x().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName), 3));
+
+        // SequentialCommandGroup a = new SequentialCommandGroup(
+        //     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)),
+        //     new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose3d_TargetSpace(Constants.kLimelightName).toPose2d())
+        // );
+        // SequentialCommandGroup x = new SequentialCommandGroup(
+        //     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)),
+        //     new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d_wpiBlue(Constants.kLimelightName))
+        // );
+        // SequentialCommandGroup b = new SequentialCommandGroup(
+        //     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)),
+        //     new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getCameraPose3d_RobotSpace(Constants.kLimelightName).toPose2d())
+        // );
+        // driverController.a().whileTrue(a).onFalse(defaultDrivetrainCommand);
+        // driverController.b().whileTrue(b).onFalse(defaultDrivetrainCommand);
+        // driverController.x().whileTrue(x).onFalse(defaultDrivetrainCommand);
+
+        // driverController.x().onTrue(new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 2)));
+        // driverController.b().onTrue(new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 3)));
 
         // reset the field-centric heading on left bumper press
         // driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));

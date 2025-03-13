@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
+import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -1641,5 +1642,23 @@ public class LimelightHelpers {
         }
 
         return results;
+    }
+
+
+    private static final NetworkTable limelight = NetworkTableInstance.getDefault().getTable(Constants.kLimelightName);
+
+    public static boolean hasTarget() {
+        return limelight.getEntry("tv").getDouble(0) >= 1;
+    }
+
+    public static Pose3d getTagPose() {
+        double tx = limelight.getEntry("targetpose_tx").getDouble(0.0); // X position (left/right)
+        double ty = limelight.getEntry("targetpose_ty").getDouble(0.0); // Y position (up/down)
+        double tz = limelight.getEntry("targetpose_tz").getDouble(0.0); // Z position (depth forward/back)
+        double rx = limelight.getEntry("targetpose_rx").getDouble(0.0); // Roll
+        double ry = limelight.getEntry("targetpose_ry").getDouble(0.0); // Pitch
+        double rz = limelight.getEntry("targetpose_rz").getDouble(0.0); // Yaw (Rotation)
+
+        return new Pose3d(new Translation3d(tx, ty, tz), new Rotation3d(Math.toRadians(rx), Math.toRadians(ry), Math.toRadians(rz)));
     }
 }
