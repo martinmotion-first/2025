@@ -1,0 +1,79 @@
+// import java.util.ArrayList;
+// import java.util.List;
+
+// import com.pathplanner.lib.commands.PathPlannerAuto;
+// import com.pathplanner.lib.path.PathPlannerPath;
+// import com.pathplanner.lib.path.PathPoint;
+// import com.pathplanner.lib.path.RotationTarget;
+// import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+// import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
+
+// import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.math.geometry.Pose3d;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.trajectory.Trajectory;
+// import edu.wpi.first.math.trajectory.TrajectoryConfig;
+// import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+// import frc.robot.limelightlib.LimelightHelpers;
+// import frc.robot.subsystems.CommandSwerveDrivetrain;
+
+// public class AlignToAprilTag extends SequentialCommandGroup {
+//     public AlignToAprilTag(CommandSwerveDrivetrain swerve) {
+//         Pose2d currentPose = swerve.getState().Pose;
+        
+//         if (!LimelightHelpers.hasTarget()) {
+//             System.out.println("No AprilTag detected.");
+//             return;
+//         }
+
+//         Pose3d tagPose = LimelightHelpers.getTagPose();
+//         double tagX = tagPose.getTranslation().getX();
+//         double tagY = tagPose.getTranslation().getY();
+//         double tagZ = tagPose.getTranslation().getZ(); // Distance from robot to tag
+
+//         // Move to a point 1 foot (0.3048m) away from the tag
+//         double desiredDistance = 0.3048;
+//         double targetX = tagX - desiredDistance * Math.cos(tagPose.getRotation().getZ());
+//         double targetY = tagY - desiredDistance * Math.sin(tagPose.getRotation().getZ());
+
+//         Pose2d targetPose = new Pose2d(targetX, targetY, new Rotation2d(tagPose.getRotation().getZ()));
+ 
+//         TrajectoryConfig config = new TrajectoryConfig(.1, .1); //HERE!!! - REVISIT AND SEPARATE THESE NUMBERS
+//         // Create trajectory to the target pose
+//         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
+//             currentPose, 
+//             targetPose
+//         ), config);
+//         // RotationTarget X = new RotationTarget(targetY, null); //HERE! - REVISIT THIS WAYPOINT - FIRST ARGUMENT
+//         // PathPlannerPath path = new PathPlannerPath();
+            
+//         // );
+//         PathPlannerTrajectoryState q = new PathPlannerTrajectoryState();
+//         q.pose = currentPose;
+//         PathPlannerTrajectoryState r = new PathPlannerTrajectoryState();
+//         r.pose = targetPose;
+
+//         List<PathPlannerTrajectoryState> states = new ArrayList<PathPlannerTrajectoryState>();
+//         states.add(q);
+//         states.add(r);
+
+//         PathPlannerTrajectory trajectory2 = new PathPlannerTrajectory(states);
+//         swerve.applyRequest(());
+
+//         addCommands(
+//             new PPSwerveControllerCommand(
+//                 trajectory,
+//                 swerve::getPose,
+//                 new PIDController(1.0, 0.0, 0.0), // X controller
+//                 new PIDController(1.0, 0.0, 0.0), // Y controller
+//                 new PIDController(1.0, 0.0, 0.0), // Rotation controller
+//                 swerve::drive, // Drive method
+//                 swerve // Requires swerve
+//             )
+//         );
+//     }
+// }
