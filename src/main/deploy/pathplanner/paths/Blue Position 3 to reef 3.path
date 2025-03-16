@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6464999999999996,
-        "y": 2.5429999999999997
+        "x": 7.4982429099876695,
+        "y": 5.074537607891491
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.77875,
-        "y": 3.1182499999999997
+        "x": 6.961478589972862,
+        "y": 3.660824889880326
       },
       "isLocked": false,
-      "linkedName": "Reef 4"
+      "linkedName": "Blue Position 3"
     },
     {
       "anchor": {
-        "x": 2.028,
-        "y": 4.2395
+        "x": 6.556905055487054,
+        "y": 2.726602959309494
       },
       "prevControl": {
-        "x": 1.9519481468220437,
-        "y": 3.1402050313368113
+        "x": 6.996927259721328,
+        "y": 3.083680995589996
       },
       "nextControl": {
-        "x": 2.13525,
-        "y": 5.789750000000001
+        "x": 6.362781588168578,
+        "y": 2.569071757840538
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.365,
-        "y": 6.969499999999999
+        "x": 5.42080764488286,
+        "y": 2.726602959309494
       },
       "prevControl": {
-        "x": 2.0085,
-        "y": 6.21875
+        "x": 5.630796021823967,
+        "y": 2.590938367209567
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Coral Loader"
+      "linkedName": "Reef3"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 58.00000000000001
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

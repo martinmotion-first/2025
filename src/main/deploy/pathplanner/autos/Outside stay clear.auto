@@ -5,13 +5,19 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Rotate only"
+                  "pathName": "1dot5m straight with 180degree rotation"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "moveElevatorToArmFree"
                 }
               }
             ]
@@ -21,6 +27,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "autos",
   "choreoAuto": false
 }

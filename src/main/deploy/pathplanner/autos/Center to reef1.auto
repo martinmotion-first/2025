@@ -5,34 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Position 2 to reef"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "prepareAlgaeL2RemoveCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "algaeRemoveCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "scoreCoralCommand"
+            "name": "moveElevatorToArmFree"
           }
         },
         {
@@ -42,22 +17,29 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Reef front to loader"
+                  "pathName": "Position 2 to reef1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "prepareIntakeCoralCommand"
+                  "name": "prepareCoralL3"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "intakeCoralCommand"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "scoreCoral"
+                }
+              }
+            ]
           }
         },
         {
@@ -67,28 +49,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Loader to position 6"
+                  "pathName": "Reef1 to Safe Load alternate"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "prepareAlgaeL2RemoveCommand"
+                  "name": "moveElevatorToArmFree"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "algaeRemoveCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "scoreCoralCommand"
           }
         }
       ]
