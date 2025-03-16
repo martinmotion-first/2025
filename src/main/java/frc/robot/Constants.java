@@ -28,8 +28,7 @@ import edu.wpi.first.math.util.Units;
   public static final double kTriggerButtonThreshold = 0.3;
 
   public static final int kXboxDriverPort = 0;
-  public static final int kXboxOperatorPort = 1;
-  public static final int kXboxOperatorManualOnlyPort = 2;
+  public static final int kXboxOperatorPort = 2;
 
   public static final String kLimelightName = "";
   public static final double kSafeElevatorInitialDelay = .5;
@@ -57,7 +56,7 @@ import edu.wpi.first.math.util.Units;
             // L3(0.70),
             // L4(1.27),
             // TOP(1.57);
-            BOTTOM(-0.007),
+            BOTTOM(-0.001),
             // ARM_FREE(-0.085),
             ARM_FREE(-0.143952),
             INTAKE_PREP(-.154),

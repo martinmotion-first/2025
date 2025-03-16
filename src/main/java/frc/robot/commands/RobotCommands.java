@@ -230,11 +230,11 @@ public class RobotCommands {
     // }
 
     public static Command elevatorOnlyGivePositiveVoltage(Elevator elevator){
-        return elevator.testSetVoltage(1);
+        return elevator.testSetVoltage(2.5);
     }
 
     public static Command elevatorOnlyGiveNegativeVoltage(Elevator elevator){
-        return elevator.testSetVoltage(-1);
+        return elevator.testSetVoltage(-2.5);
     }
 
     public static Command elevatorOnlyGiveZero(Elevator elevator){
@@ -242,11 +242,11 @@ public class RobotCommands {
     }
 
     public static Command armOnlyGivePositiveVoltage(Arm arm){
-        return arm.testSetVoltage(2);
+        return arm.testSetVoltage(2.5);
     }
 
     public static Command armOnlyGiveNegativeVoltage(Arm arm){
-        return arm.testSetVoltage(-2);
+        return arm.testSetVoltage(-2.5);
     }
 
     public static Command armOnlyGiveZeroVoltage(Arm arm){

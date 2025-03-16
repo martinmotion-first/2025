@@ -64,8 +64,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   private final CommandXboxController driver = new CommandXboxController(Constants.kXboxDriverPort);
-  private final CommandXboxController operator = new CommandXboxController(Constants.kXboxOperatorPort);
-  private final CommandXboxController operatorAlterante = new CommandXboxController(Constants.kXboxOperatorManualOnlyPort);
+  private final CommandXboxController operatorAlterante = new CommandXboxController(Constants.kXboxOperatorPort);
 
 
   private Mechanism2d mechanisms = new Mechanism2d(5, 3);
@@ -139,13 +138,8 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     DriverMapping6237MR.mapXboxController(driver, drivetrain, NetworkTableInstance.getDefault().getTable("limelight"));
-    // OperatorMapping6237MR.mapXboxController(operator, drivetrain, elevator, arm, intake, climber, coralSim);
-    OperatorMapping6237MR.mapXboxControllerManualOnlyControl(operatorAlterante, drivetrain, elevator, arm, intake, climber, coralSim);
+    OperatorMapping6237MR.mapXboxController(operatorAlterante, drivetrain, elevator, arm, intake, climber, coralSim);
   }
-
-  // public double getIntakeArmPosition(){
-  //   return intakeArm.getPosition();
-  // }
 
   public double getElevatorPosition(){
     return elevator.getPosition();

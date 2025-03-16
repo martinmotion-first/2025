@@ -210,11 +210,11 @@ public class Robot extends TimedRobot {
     //   //END ADDED from limelight event prep: https://docs.limelightvision.io/docs/docs-limelight/getting-started/FRC/best-practices
 
     //HERE! WHEN THE CAMERA(S) ARE ADDED
-    UsbCamera cam = CameraServer.startAutomaticCapture();
+    UsbCamera cam = CameraServer.startAutomaticCapture(0);
     cam.setResolution(320, 240);
     cam.setFPS(20);
 
-    UsbCamera cam2 = CameraServer.startAutomaticCapture();
+    UsbCamera cam2 = CameraServer.startAutomaticCapture(1);
     cam2.setResolution(320, 240);
     cam2.setFPS(20);
   }
