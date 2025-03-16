@@ -40,7 +40,7 @@ import edu.wpi.first.math.util.Units;
       public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
     //new CTRE P6 constants
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRate = RotationsPerSecond.of(0.7).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
   }
 
   public static final class Elevator {
