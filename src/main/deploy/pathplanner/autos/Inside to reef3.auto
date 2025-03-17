@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "prepareCoralL3"
+                  "name": "prepareCoralL2"
                 }
               }
             ]
@@ -36,7 +36,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "scoreCoral"
+                  "name": "scoreCoralNew"
                 }
               }
             ]

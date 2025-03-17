@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.Elevator.ElevatorPosition;
 import frc.robot.commands.Autos;
 import frc.robot.commands.RobotCommands;
 import frc.robot.controllers.DriverMapping6237MR;
@@ -89,6 +90,12 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // NamedCommands.registerCommand("moveElevatorToArmFree", RobotCommands.elevatorCombinedCommandAuto(elevator, arm, ElevatorPosition.ARM_FREE));
+    NamedCommands.registerCommand("moveElevatorToArmFree", RobotCommands.elevatorCombinedCommandAutoArmFree(elevator, arm));
+    NamedCommands.registerCommand("prepareCoralL2", RobotCommands.elevatorCombinedCommandAutoL2(elevator, arm));
+    NamedCommands.registerCommand("prepareCoralL3", RobotCommands.elevatorCombinedCommandAutoL3(elevator, arm));
+    NamedCommands.registerCommand("scoreCoral", RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
+    
     // autoChooser = AutoBuilder.buildAutoChooser("1dot5m straight with 90degree rotation");
     autoChooser = AutoBuilder.buildAutoChooser("Outside stay clear");
     SmartDashboard.putData("Auto Mode", autoChooser);
@@ -120,10 +127,6 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     // NamedCommands.registerCommand("prepareCoralScoreCommand", RobotCommands.prepareCoralScoreCommand(null, elevator, arm, coralSim));
-    NamedCommands.registerCommand("moveElevatorToArmFree", RobotCommands.elevatorOnlyMoveToPosition(elevator, Constants.Elevator.ElevatorPosition.ARM_FREE));
-    NamedCommands.registerCommand("prepareCoralL2", RobotCommands.elevatorCombinedCommand(elevator, arm, Constants.Elevator.ElevatorPosition.L2));
-    NamedCommands.registerCommand("prepareCoralL3", RobotCommands.elevatorCombinedCommand(elevator, arm, Constants.Elevator.ElevatorPosition.L3));
-    NamedCommands.registerCommand("scoreCoral", RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
     // NamedCommands.registerCommand("autoPrepareCoralScoreCommandL2", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
     // NamedCommands.registerCommand("autoPrepareCoralScoreCommandL3", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
     // NamedCommands.registerCommand("autoPrepareCoralScoreCommandL4", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));

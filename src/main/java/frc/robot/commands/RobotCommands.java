@@ -4,6 +4,7 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm.ArmPosition;
 import frc.robot.Constants.Elevator.ElevatorPosition;
@@ -193,6 +194,70 @@ public class RobotCommands {
                 arm.moveToPositionCommandAlternate(armPosition).asProxy()
             );
         }
+
+    }
+
+    public static Command elevatorCombinedCommandAutoArmFree(Elevator elevator, Arm arm) {
+        ArmPosition armPosition = ArmPosition.BOTTOM;
+        ElevatorPosition elevatorPosition = ElevatorPosition.ARM_FREE;
+
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        ).raceWith(new WaitCommand(3));
+    }
+
+    public static Command elevatorCombinedCommandAutoL2(Elevator elevator, Arm arm) {
+        ArmPosition armPosition = ArmPosition.L2;
+        ElevatorPosition elevatorPosition = ElevatorPosition.L2;
+        
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        ).raceWith(new WaitCommand(3));
+    }
+
+    public static Command elevatorCombinedCommandAutoL3(Elevator elevator, Arm arm) {
+        ArmPosition armPosition = ArmPosition.L3;
+        ElevatorPosition elevatorPosition = ElevatorPosition.L3;
+        
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        ).raceWith(new WaitCommand(3));
+    }
+    public static Command elevatorCombinedCommandAutoScoreCoral(Elevator elevator, Arm arm) {
+        ArmPosition armPosition = ArmPosition.HORIZONTAL;
+        ElevatorPosition elevatorPosition = ElevatorPosition.L3;
+        
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        ).raceWith(new WaitCommand(3));
+    }
+
+    public static Command elevatorCombinedCommandAuto(Elevator elevator, Arm arm, ElevatorPosition elevatorPosition) {
+        // System.out.println("********************************** IN ELEVATOR COMBINED COMMAND AUTO ****************************");
+        // System.out.println("Elevator detected current position before moving: " + elevator.getPosition());
+        // System.out.println("********************************** END COMBINED COMMAND AUTO ****************************");
+        ArmPosition armPosition = null;
+        if(elevatorPosition == ElevatorPosition.L3){
+            armPosition = ArmPosition.L3;
+        }
+        else if(elevatorPosition == ElevatorPosition.L2){
+            armPosition = ArmPosition.L2;
+        }else if (elevatorPosition == ElevatorPosition.TOP){
+            armPosition = ArmPosition.TOP;
+        }else if(elevatorPosition == ElevatorPosition.ALGAE_L2 || elevatorPosition == ElevatorPosition.ALGAE_L3){
+            armPosition = ArmPosition.ALGAE;
+        } else{
+            armPosition = ArmPosition.BOTTOM;
+        }
+
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        );
 
     }
 
