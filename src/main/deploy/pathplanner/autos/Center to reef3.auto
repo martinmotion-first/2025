@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Position 2 to reef1"
+                  "pathName": "Position 2 to reef3"
                 }
               },
               {
@@ -56,7 +56,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Reef1 to Safe Load alternate"
+                  "pathName": "Reef3 to Safe Load alternate"
                 }
               },
               {
