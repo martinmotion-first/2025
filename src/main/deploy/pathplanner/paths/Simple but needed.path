@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7495000000000003,
-        "y": 4.0445
+        "x": 7.5075,
+        "y": 7.262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.50575,
-        "y": 5.039
+        "x": 8.150500000000001,
+        "y": 7.262
       },
       "isLocked": false,
-      "linkedName": "Reef Position 5"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.365,
-        "y": 6.969499999999999
+        "x": 7.5075,
+        "y": 7.262
       },
       "prevControl": {
-        "x": 2.262,
-        "y": 6.0920000000000005
+        "x": 6.912670087335885,
+        "y": 7.262
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Coral Loader"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,

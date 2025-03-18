@@ -29,8 +29,8 @@ public class OperatorMapping6237MR {
         controller.axisGreaterThan(1, 0.2).onTrue(RobotCommands.intakeCoralCommand(elevator, arm, coralSim));       //Left Stick Up
 
         controller.start().onTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
-        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP)); //TEMP TEMP
-        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));  //TEMP TEMP
+        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP)); 
+        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));  
         controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
         controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
 

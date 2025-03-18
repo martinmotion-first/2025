@@ -51,9 +51,9 @@ public class SimpleDriveToPoseCommand extends Command {
         m_maxRotationSpeed = maxRotationSpeed;
         
         // Create the PID controllers
-        m_xController = new PIDController(1.0, 0.0, 0.0);
-        m_yController = new PIDController(1.0, 0.0, 0.0);
-        m_rotationController = new PIDController(2.0, 0.0, 0.0);
+        m_xController = new PIDController(.1, 0.0, 0.0);
+        m_yController = new PIDController(.1, 0.0, 0.0);
+        m_rotationController = new PIDController(100.0, 0.0, 0.0);
         
         // Set the tolerance for the controllers
         m_xController.setTolerance(positionTolerance);
@@ -73,7 +73,7 @@ public class SimpleDriveToPoseCommand extends Command {
      * @param targetPose The target pose to drive to
      */
     public SimpleDriveToPoseCommand(CommandSwerveDrivetrain drivetrain, Pose2d targetPose) {
-        this(drivetrain, targetPose, 0.1, 0.05, 2, Math.PI / 2);
+        this(drivetrain, LimelightHelpers.getBotPose3d_TargetSpace(Constants.kLimelightName).toPose2d(), 0.1, 0.05, 2, Math.PI / 2);
     }
     
     @Override

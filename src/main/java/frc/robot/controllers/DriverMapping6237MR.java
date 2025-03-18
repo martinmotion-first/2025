@@ -90,9 +90,9 @@ public class DriverMapping6237MR {
         
         // driverController.a().onTrue(new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)));
         
-        // driverController.a().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName), 1));
-        // driverController.b().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName), 2));
-        // driverController.x().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName), 3));
+        // driverController.a().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getTargetPose3d_CameraSpace(Constants.kLimelightName).toPose2d()));
+        // driverController.b().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName)));
+        // driverController.x().onTrue(new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d(Constants.kLimelightName)));
 
         // SequentialCommandGroup a = new SequentialCommandGroup(
         //     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)),
@@ -100,15 +100,15 @@ public class DriverMapping6237MR {
         // );
         // SequentialCommandGroup x = new SequentialCommandGroup(
         //     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)),
-        //     new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getBotPose2d_wpiBlue(Constants.kLimelightName))
+        //     new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getTargetPose3d_CameraSpace(Constants.kLimelightName).toPose2d())
         // );
         // SequentialCommandGroup b = new SequentialCommandGroup(
         //     new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 1)),
         //     new SimpleDriveToPoseCommand(drivetrain, LimelightHelpers.getCameraPose3d_RobotSpace(Constants.kLimelightName).toPose2d())
         // );
-        // driverController.a().whileTrue(a).onFalse(defaultDrivetrainCommand);
-        // driverController.b().whileTrue(b).onFalse(defaultDrivetrainCommand);
-        // driverController.x().whileTrue(x).onFalse(defaultDrivetrainCommand);
+        // driverController.a().onTrue(a).onFalse(defaultDrivetrainCommand);
+        // driverController.b().onTrue(b).onFalse(defaultDrivetrainCommand);
+        // driverController.x().onTrue(x).onFalse(defaultDrivetrainCommand);
 
         // driverController.x().onTrue(new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 2)));
         // driverController.b().onTrue(new InstantCommand(() -> LimelightHelpers.setPipelineIndex(Constants.kLimelightName, 3)));

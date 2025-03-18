@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.Elevator.ElevatorPosition;
 import frc.robot.commands.Autos;
 import frc.robot.commands.RobotCommands;
 import frc.robot.controllers.DriverMapping6237MR;
@@ -46,6 +47,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -89,9 +91,16 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // NamedCommands.registerCommand("moveElevatorToArmFree", RobotCommands.elevatorCombinedCommandAuto(elevator, arm, ElevatorPosition.ARM_FREE));
+    NamedCommands.registerCommand("moveElevatorToArmFree", RobotCommands.elevatorCombinedCommandAutoArmFree(elevator, arm));
+    NamedCommands.registerCommand("prepareCoralL2", RobotCommands.elevatorCombinedCommandAutoL2(elevator, arm));
+    NamedCommands.registerCommand("prepareCoralL3", RobotCommands.elevatorCombinedCommandAutoL3(elevator, arm));
+    NamedCommands.registerCommand("scoreCoralAutoL2", RobotCommands.elevatorCombinedCommandAutoScoreCoralL2(elevator, arm));
+    NamedCommands.registerCommand("scoreCoralAutoL3", RobotCommands.elevatorCombinedCommandAutoScoreCoralL3(elevator, arm));
+    
     // autoChooser = AutoBuilder.buildAutoChooser("1dot5m straight with 90degree rotation");
-    autoChooser = AutoBuilder.buildAutoChooser("");
-    // SmartDashboard.putData("Auto Mode", autoChooser);
+    autoChooser = AutoBuilder.buildAutoChooser("Outside stay clear");
+    SmartDashboard.putData("Auto Mode", autoChooser);
     // SmartDashboard.putData("pigeon2", drivetrain.getPigeon2());
     // SmartDashboard.putNumber("drivetrain module 0 (front-left) encoder", drivetrain.getModule(0).getEncoder().getAbsolutePosition().getValueAsDouble());
     // SmartDashboard.putNumber("drivetrain module 1 (front-right) encoder", drivetrain.getModule(1).getEncoder().getAbsolutePosition().getValueAsDouble());
@@ -120,18 +129,18 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     // NamedCommands.registerCommand("prepareCoralScoreCommand", RobotCommands.prepareCoralScoreCommand(null, elevator, arm, coralSim));
-    NamedCommands.registerCommand("autoPrepareCoralScoreCommandL2", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
-    NamedCommands.registerCommand("autoPrepareCoralScoreCommandL3", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
-    NamedCommands.registerCommand("autoPrepareCoralScoreCommandL4", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
-    NamedCommands.registerCommand("scoreCoralCommand", RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
-    NamedCommands.registerCommand("prepareIntakeCoralCommand", RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
-    NamedCommands.registerCommand("intakeCoralCommand", RobotCommands.intakeCoralCommand(elevator, arm, coralSim));
-    NamedCommands.registerCommand("intakeIntoScoreCommandL2", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
-    NamedCommands.registerCommand("intakeIntoScoreCommandL3", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
-    NamedCommands.registerCommand("intakeIntoScoreCommandL4", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
-    NamedCommands.registerCommand("prepareAlgaeL2RemoveCommand", RobotCommands.prepareAlgaeL2RemoveCommand(elevator, arm));
-    NamedCommands.registerCommand("prepareAlgaeL3RemoveCommand", RobotCommands.prepareAlgaeL3RemoveCommand(elevator, arm));
-    NamedCommands.registerCommand("algaeRemoveCommand", RobotCommands.algaeRemoveCommand(elevator, arm));
+    // NamedCommands.registerCommand("autoPrepareCoralScoreCommandL2", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("autoPrepareCoralScoreCommandL3", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("autoPrepareCoralScoreCommandL4", RobotCommands.autoPrepareCoralScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("scoreCoralCommand", RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("prepareIntakeCoralCommand", RobotCommands.prepareIntakeCoralCommand(elevator, arm, coralSim));
+    // NamedCommands.registerCommand("intakeCoralCommand", RobotCommands.intakeCoralCommand(elevator, arm, coralSim));
+    // NamedCommands.registerCommand("intakeIntoScoreCommandL2", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L2, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("intakeIntoScoreCommandL3", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L3, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("intakeIntoScoreCommandL4", RobotCommands.intakeIntoScoreCommand(ScoreLevel.L4, elevator, arm, coralSim));
+    // NamedCommands.registerCommand("prepareAlgaeL2RemoveCommand", RobotCommands.prepareAlgaeL2RemoveCommand(elevator, arm));
+    // NamedCommands.registerCommand("prepareAlgaeL3RemoveCommand", RobotCommands.prepareAlgaeL3RemoveCommand(elevator, arm));
+    // NamedCommands.registerCommand("algaeRemoveCommand", RobotCommands.algaeRemoveCommand(elevator, arm));
 
     configureButtonBindings();
   }
@@ -156,6 +165,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+    // return new WaitCommand(3.0);
   }
   
   public void getSimPeriodic(Field2d field) {
