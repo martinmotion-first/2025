@@ -47,6 +47,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -94,7 +95,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("moveElevatorToArmFree", RobotCommands.elevatorCombinedCommandAutoArmFree(elevator, arm));
     NamedCommands.registerCommand("prepareCoralL2", RobotCommands.elevatorCombinedCommandAutoL2(elevator, arm));
     NamedCommands.registerCommand("prepareCoralL3", RobotCommands.elevatorCombinedCommandAutoL3(elevator, arm));
-    NamedCommands.registerCommand("scoreCoral", RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
+    NamedCommands.registerCommand("scoreCoralAutoL2", RobotCommands.elevatorCombinedCommandAutoScoreCoralL2(elevator, arm));
+    NamedCommands.registerCommand("scoreCoralAutoL3", RobotCommands.elevatorCombinedCommandAutoScoreCoralL3(elevator, arm));
     
     // autoChooser = AutoBuilder.buildAutoChooser("1dot5m straight with 90degree rotation");
     autoChooser = AutoBuilder.buildAutoChooser("Outside stay clear");
@@ -163,6 +165,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+    // return new WaitCommand(3.0);
   }
   
   public void getSimPeriodic(Field2d field) {

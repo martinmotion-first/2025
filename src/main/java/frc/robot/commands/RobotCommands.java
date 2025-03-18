@@ -226,7 +226,17 @@ public class RobotCommands {
             arm.moveToPositionCommandAlternate(armPosition).asProxy()
         ).raceWith(new WaitCommand(3));
     }
-    public static Command elevatorCombinedCommandAutoScoreCoral(Elevator elevator, Arm arm) {
+    public static Command elevatorCombinedCommandAutoScoreCoralL2(Elevator elevator, Arm arm) {
+        ArmPosition armPosition = ArmPosition.HORIZONTAL;
+        ElevatorPosition elevatorPosition = ElevatorPosition.L2;
+        
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        ).raceWith(new WaitCommand(3));
+    }
+
+    public static Command elevatorCombinedCommandAutoScoreCoralL3(Elevator elevator, Arm arm) {
         ArmPosition armPosition = ArmPosition.HORIZONTAL;
         ElevatorPosition elevatorPosition = ElevatorPosition.L3;
         

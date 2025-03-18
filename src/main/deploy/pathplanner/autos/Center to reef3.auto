@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "moveElevatorToArmFree"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -15,22 +21,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "moveElevatorToArmFree"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "prepareCoralL2"
-                      }
-                    }
-                  ]
+                  "name": "prepareCoralL2"
                 }
               }
             ]
@@ -43,7 +36,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "scoreCoralNew"
+                  "name": "scoreCoralAutoL2"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
                 }
               }
             ]
