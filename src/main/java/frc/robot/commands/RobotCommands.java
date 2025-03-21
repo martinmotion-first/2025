@@ -305,11 +305,11 @@ public class RobotCommands {
     // }
 
     public static Command elevatorOnlyGivePositiveVoltage(Elevator elevator){
-        return elevator.testSetVoltage(2.5);
+        return elevator.testSetVoltage(7);
     }
 
     public static Command elevatorOnlyGiveNegativeVoltage(Elevator elevator){
-        return elevator.testSetVoltage(-2.5);
+        return elevator.testSetVoltage(-7);
     }
 
     public static Command elevatorOnlyGiveZero(Elevator elevator){
