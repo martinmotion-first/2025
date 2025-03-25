@@ -300,24 +300,23 @@ public class AprilTagCommands {
 
     public static class MoveToTranslationCommand extends Command {
         private final CommandSwerveDrivetrain drivetrain;
-        private final Supplier<Pose2d> poseSupplier;
-        private final Pose2d scoringPosition;
+        private Pose2d scoringPosition;
+        private Transform2d storedTransform;
 
         
         private static final double MAX_DRIVE_SPEED = 1.0; // m/s
         private static final double MAX_ROTATION_SPEED = 1.5; // rad/s
         
-        private final PIDController xController = new PIDController(1.0, 0, 0.05);
-        private final PIDController yController = new PIDController(1.0, 0, 0.05);
-        private final PIDController rotationController = new PIDController(100, 0, 0.05);
+        private final PIDController xController = new PIDController(10, 0, 0.05);
+        private final PIDController yController = new PIDController(10, 0, 0.05);
+        private final PIDController rotationController = new PIDController(7, 0, 0.05);
         
         private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
         
-        public MoveToTranslationCommand(CommandSwerveDrivetrain drivetrain, Supplier<Pose2d> currentPoseSupplier, Transform2d scoringPosition) {
+        public MoveToTranslationCommand(CommandSwerveDrivetrain drivetrain, Transform2d newTransform) {
             this.drivetrain = drivetrain;
-            this.poseSupplier = currentPoseSupplier;
-            this.scoringPosition = currentPoseSupplier.get().transformBy(scoringPosition);
+            storedTransform = newTransform;
             
             xController.setTolerance(0.05); // 5cm tolerance
             yController.setTolerance(0.05); // 5cm tolerance
@@ -328,14 +327,15 @@ public class AprilTagCommands {
         
         @Override
         public void initialize() {
+            this.scoringPosition = drivetrain.getState().Pose.transformBy(storedTransform);
             SmartDashboard.putString("Current Command", "Moving to Scoring Position");
-            SmartDashboard.putString("Initialized pose from drivetrain:   ", "X=" + poseSupplier.get().getX() + " Y=" + poseSupplier.get().getY());
+            SmartDashboard.putString("Initialized pose from drivetrain:   ", "X=" + drivetrain.getState().Pose.getX() + " Y=" + drivetrain.getState().Pose.getY());
             SmartDashboard.putString("Scoring Position:   ", "X=" + scoringPosition.getX() + " Y=" + scoringPosition.getY());
         }
         
         @Override
         public void execute() {
-            Pose2d currentPose = poseSupplier.get();
+            Pose2d currentPose = drivetrain.getState().Pose;
             
             // Calculate position errors
             double xError = scoringPosition.getX() - currentPose.getX();

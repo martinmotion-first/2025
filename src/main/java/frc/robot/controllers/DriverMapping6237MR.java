@@ -120,8 +120,8 @@ public class DriverMapping6237MR {
         // reset the field-centric heading on left bumper press
         // driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         driverController.a().whileTrue(new AprilTagCommands.ApproachAprilTagCommand(drivetrain, limelight)).onFalse(defaultDrivetrainCommand);
-        driverController.x().onTrue(new AprilTagCommands.MoveToTranslationCommand(drivetrain, () -> drivetrain.getState().Pose, new Transform2d(new Translation2d(1, 1), drivetrain.getState().Pose.getRotation()))).onFalse(defaultDrivetrainCommand);
-        driverController.b().onTrue(new AprilTagCommands.MoveToTranslationCommand(drivetrain, () -> drivetrain.getState().Pose,  new Transform2d(new Translation2d(-1, -1), drivetrain.getState().Pose.getRotation()))).onFalse(defaultDrivetrainCommand);
+        driverController.b().onTrue(new AprilTagCommands.MoveToTranslationCommand(drivetrain, new Transform2d(new Translation2d(.3, -.5), new Rotation2d()))).onFalse(defaultDrivetrainCommand);
+        driverController.x().onTrue(new AprilTagCommands.MoveToTranslationCommand(drivetrain, new Transform2d(new Translation2d(.3, .5), new Rotation2d()))).onFalse(defaultDrivetrainCommand);
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
