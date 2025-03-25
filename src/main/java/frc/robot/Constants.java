@@ -187,7 +187,10 @@ import edu.wpi.first.math.util.Units;
     public static final class Intake {
         public static final int MOTOR_ID = 6;
         public static final boolean MOTOR_INVERTED = true;
-        public static final int CURRENT_LIMIT = 40; //dropping down to 60;
+        public static final int CURRENT_LIMIT = 40; 
+
+        public static final double FORWARD_VOLTAGE = 6;
+        public static final double REVERSE_VOLTAGE = -6;
     }
 
     public static final class Climber {
@@ -196,7 +199,7 @@ import edu.wpi.first.math.util.Units;
         public static final int CURRENT_LIMIT = 60;
 
         public static final double MIN_POSITION_METERS = 0.0;
-        public static final double MAX_POSITION_METERS = 0.1; // TODO HERE!!! (tuning way down for intial attempt (from 1.0))
+        public static final double MAX_POSITION_METERS = 0.2; // TODO HERE!!! (tuning way down for intial attempt (from 1.0))
 
         public static final double GEARING = 80.0; //changing from 64.0
         public static final double MASS_KG = Units.lbsToKilograms(80); // robot weight

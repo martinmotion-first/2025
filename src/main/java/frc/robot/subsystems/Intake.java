@@ -10,6 +10,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import static frc.robot.Constants.Intake.*;
 
 
@@ -36,14 +38,14 @@ public class Intake extends SubsystemBase implements BaseIntake {
     @Override
     public Command runRollersCommand() {
         return Commands.startEnd(
-                () -> setRollerVoltage(3),
+                () -> setRollerVoltage(Constants.Intake.FORWARD_VOLTAGE),
                 () -> setRollerVoltage(0))
                 .withName("intake.runRollers");
     }
     @Override
     public Command reverseRollersCommand() {
         return Commands.startEnd(
-                () -> setRollerVoltage(-12),
+                () -> setRollerVoltage(Constants.Intake.REVERSE_VOLTAGE),
                 () -> setRollerVoltage(0))
                 .withName("intake.reverseRollers");
     }

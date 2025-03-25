@@ -25,7 +25,7 @@ public class OperatorMapping6237MR {
 
         controller.leftBumper().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L2));       // Left Stick Left (Negative Y-Axis)
         controller.rightBumper().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L3));   // Left Stick Right (Positive Y-Axis)
-        controller.axisLessThan(1, -0.2).onTrue(RobotCommands.armOnlyMoveToPosition(arm, ArmPosition.L2));       //Left Stick Up
+        controller.axisGreaterThan(1, -0.2).onTrue(intake.runRollersCommand());       //Left Stick Up
         controller.axisGreaterThan(1, 0.2).onTrue(RobotCommands.intakeCoralCommand(elevator, arm, coralSim));       //Left Stick Up
 
         controller.start().onTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
