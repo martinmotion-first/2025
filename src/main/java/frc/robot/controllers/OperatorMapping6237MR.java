@@ -34,11 +34,11 @@ public class OperatorMapping6237MR {
         controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
         controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
 
-        controller.povDown().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
-        controller.povUp().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
+        controller.povDown().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armHoldPosition(arm));
+        controller.povUp().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armHoldPosition(arm));
         
-        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
-        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorOnlyGiveZero(elevator));
+        controller.axisLessThan(5, -0.2).whileTrue(RobotCommands.elevatorOnlyGiveNegativeVoltage(elevator)).onFalse(RobotCommands.elevatorHoldPosition(elevator));
+        controller.axisGreaterThan(5, 0.2).whileTrue(RobotCommands.elevatorOnlyGivePositiveVoltage(elevator)).onFalse(RobotCommands.elevatorHoldPosition(elevator));
         
 
         climber.setDefaultCommand(Commands

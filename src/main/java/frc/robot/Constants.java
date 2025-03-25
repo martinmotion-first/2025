@@ -169,7 +169,7 @@ import edu.wpi.first.math.util.Units;
 
         public static final int CURRENT_LIMIT = 50;
 
-        public static final double kP = 13; // TODO
+        public static final double kP = 20; // TODO
         public static final double kI = 0; // TODO
         public static final double kD = 0; // TODO
         public static final double kS = 0.017964; // TODO

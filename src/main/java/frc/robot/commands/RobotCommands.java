@@ -5,6 +5,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm.ArmPosition;
 import frc.robot.Constants.Elevator.ElevatorPosition;
@@ -157,6 +158,12 @@ public class RobotCommands {
             // elevator.testSetVoltage(0)
         );
     }
+    public static Command elevatorHoldPosition(Elevator elevator) {
+        return elevator.holdCurrentPositionCommand();
+    }
+    public static Command armHoldPosition(Arm arm) {
+        return arm.holdCurrentPositionCommand();
+    }
     public static Command elevatorCombinedCommand(Elevator elevator, Arm arm, ElevatorPosition elevatorPosition) {
         // System.out.println("********************************** IN ELEVATOR COMBINED COMMAND ****************************");
         // System.out.println("Elevator detected curren position before moving: " + elevator.getPosition());
@@ -175,25 +182,29 @@ public class RobotCommands {
             armPosition = ArmPosition.BOTTOM;
         }
 
-        if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
-                                                                        elevatorPosition == ElevatorPosition.L2) 
-                                                                     && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
-            return Commands.sequence(
-                Commands.parallel(
-                    elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
-                    Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
-                ),
-                Commands.parallel(
-                    arm.moveToPositionCommandAlternate(armPosition).asProxy(),
-                    Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
-                )  
-            );
-        }else{
-            return Commands.parallel(
-                elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-                arm.moveToPositionCommandAlternate(armPosition).asProxy()
-            );
-        }
+        // if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
+        //                                                                 elevatorPosition == ElevatorPosition.L2) 
+        //                                                              && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
+        //     return Commands.sequence(
+        //         Commands.parallel(
+        //             elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
+        //             Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
+        //         ),
+        //         Commands.parallel(
+        //             arm.moveToPositionCommandAlternate(armPosition).asProxy(),
+        //             Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
+        //         )  
+        //     );
+        // }else{
+        //     return Commands.parallel(
+        //         elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+        //         arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        //     );
+        // }
+        return Commands.parallel(
+            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+            arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        );
 
     }
 
@@ -344,8 +355,8 @@ public class RobotCommands {
                 elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE),
                 Commands.parallel(
                         elevator.moveToPositionCommand(() -> ElevatorPosition.BOTTOM).asProxy(),
-                        arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()),
-                elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE)
+                        arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
+                elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE).withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
         );
     }
 
