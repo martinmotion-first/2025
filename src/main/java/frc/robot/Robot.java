@@ -135,6 +135,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Elevator position", m_robotContainer.getElevatorPosition());
     //***** END LimeLight Dashboard ****
     SmartDashboard.putNumber("Arm position", m_robotContainer.getArmPosition());
+    m_robotContainer.updateVisionMeasurements();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

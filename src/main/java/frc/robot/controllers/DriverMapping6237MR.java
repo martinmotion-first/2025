@@ -4,6 +4,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,11 +17,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
 import frc.robot.Telemetry;
+import frc.robot.commands.AprilTagCommands;
 import frc.robot.commands.SimpleDriveToPoseCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.limelightlib.LimelightHelpers;
 import frc.robot.limelightlib.LimelightHelpers.LimelightTarget_Retro;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.LimelightVisionSubsystem;
 
 public class DriverMapping6237MR {
 
@@ -51,7 +55,7 @@ public class DriverMapping6237MR {
     private static double invertYNumber = -1.0;
     private static NetworkTable limelight;
 
-    public static void mapXboxController(CommandXboxController driverController, CommandSwerveDrivetrain drivetrain, NetworkTable limelight) {
+    public static void mapXboxController(CommandXboxController driverController, CommandSwerveDrivetrain drivetrain, LimelightVisionSubsystem limelight) {
         // robotCentric = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
         // invertFrontAndBackButton = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
         //switching for Rachel
@@ -115,6 +119,9 @@ public class DriverMapping6237MR {
 
         // reset the field-centric heading on left bumper press
         // driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driverController.a().whileTrue(new AprilTagCommands.ApproachAprilTagCommand(drivetrain, limelight)).onFalse(defaultDrivetrainCommand);
+        driverController.x().onTrue(new AprilTagCommands.MoveToTranslationCommand(drivetrain, () -> drivetrain.getState().Pose, new Transform2d(new Translation2d(1, 1), drivetrain.getState().Pose.getRotation()))).onFalse(defaultDrivetrainCommand);
+        driverController.b().onTrue(new AprilTagCommands.MoveToTranslationCommand(drivetrain, () -> drivetrain.getState().Pose,  new Transform2d(new Translation2d(-1, -1), drivetrain.getState().Pose.getRotation()))).onFalse(defaultDrivetrainCommand);
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

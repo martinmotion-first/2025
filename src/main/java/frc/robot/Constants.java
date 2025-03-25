@@ -250,4 +250,45 @@ import edu.wpi.first.math.util.Units;
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
 
+    // AprilTag Constants
+    public static final class AprilTag {
+        // Pipeline indices
+        public static final int APRILTAG_PIPELINE = 0;
+        public static final int REFLECTIVE_PIPELINE = 1;
+        
+        // Target IDs for specific AprilTags
+        public static final int SCORING_APRILTAG_ID = 3; // Update with actual ID
+        public static final int LOADING_APRILTAG_ID = 4; // Update with actual ID
+        
+        // Approach parameters
+        public static final double TARGET_DISTANCE = 0.5; // meters
+        public static final double ALIGNMENT_THRESHOLD = 2.0; // degrees
+        
+        // PID constants for approach
+        public static final double APPROACH_P = 0.03;
+        public static final double APPROACH_I = 0.0;
+        public static final double APPROACH_D = 0.001;
+        
+        public static final double DISTANCE_P = 1.0;
+        public static final double DISTANCE_I = 0.0;
+        public static final double DISTANCE_D = 0.05;
+        
+        // Scoring positions
+        // These positions should be updated based on your field layout
+        // Position 1 - Left scoring position
+        public static final double SCORE_POS_1_X = 1.5;
+        public static final double SCORE_POS_1_Y = 5.5;
+        public static final double SCORE_POS_1_ROTATION = 0.0; // radians
+        
+        // Position 2 - Center scoring position
+        public static final double SCORE_POS_2_X = 1.5;
+        public static final double SCORE_POS_2_Y = 4.0;
+        public static final double SCORE_POS_2_ROTATION = 0.0; // radians
+        
+        // Position 3 - Right scoring position
+        public static final double SCORE_POS_3_X = 1.5;
+        public static final double SCORE_POS_3_Y = 2.5;
+        public static final double SCORE_POS_3_ROTATION = 0.0; // radians
+    }
+
 }

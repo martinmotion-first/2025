@@ -20,6 +20,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeArm;
+import frc.robot.subsystems.LimelightVisionSubsystem;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -65,6 +66,7 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  private final LimelightVisionSubsystem visionSubsystem = new LimelightVisionSubsystem(drivetrain);
   private final CommandXboxController driver = new CommandXboxController(Constants.kXboxDriverPort);
   private final CommandXboxController operatorAlterante = new CommandXboxController(Constants.kXboxOperatorPort);
 
@@ -146,7 +148,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    DriverMapping6237MR.mapXboxController(driver, drivetrain, NetworkTableInstance.getDefault().getTable("limelight"));
+    DriverMapping6237MR.mapXboxController(driver, drivetrain, visionSubsystem);
     OperatorMapping6237MR.mapXboxController(operatorAlterante, drivetrain, elevator, arm, intake, climber, coralSim);
   }
 
@@ -174,5 +176,8 @@ public class RobotContainer {
 
   public void getAutoPeriodic(Timer timer) {
     // drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(Constants.kLimelightName), Timer.getMatchTime());
+  }
+  public void updateVisionMeasurements() {
+    visionSubsystem.updateOdometryWithVision();
   }
 }
