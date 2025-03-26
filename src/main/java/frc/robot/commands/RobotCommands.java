@@ -353,10 +353,11 @@ public class RobotCommands {
         return Commands.sequence(
                 // prepareIntakeCoralCommand(elevator, arm, coralSim),
                 elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE),
-                Commands.parallel(
-                        elevator.moveToPositionCommand(() -> ElevatorPosition.BOTTOM).asProxy(),
-                        arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()).withInterruptBehavior(InterruptionBehavior.kCancelIncoming),
-                elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE).withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+                elevatorCombinedCommand(elevator, arm, ElevatorPosition.BOTTOM),
+                // Commands.parallel(
+                //         elevator.moveToPositionCommand(() -> ElevatorPosition.BOTTOM).asProxy(),
+                //         arm.moveToPositionCommand(() -> ArmPosition.BOTTOM).asProxy()),
+                elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE)
         );
     }
 
