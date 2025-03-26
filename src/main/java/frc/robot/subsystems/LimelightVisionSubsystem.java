@@ -104,14 +104,70 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     public boolean isAtGrabbingDistance() {
         return hasTarget() && Math.abs(getEstimatedDistance() - TARGET_DISTANCE) < DISTANCE_THRESHOLD;
     }
-    
+
     /**
-     * Check if we're ready to grab (aligned and at correct distance)
-     */
-    public boolean isReadyToGrab() {
-        return isAligned() && isAtGrabbingDistance();
+ * Get the front-to-back distance from the robot to the AprilTag in meters.
+ * Positive values indicate the target is in front of the robot.
+ * Negative values indicate the target is behind the robot.
+ * 
+ * @return The front-to-back distance in meters, or -9999 if no target is detected
+ */
+public double getFrontToBackDistance() {
+    if (!hasTarget()) {
+        return -9999; // No valid target detected
     }
     
+    // Method 1: Direct access to botpose array (most reliable for front-to-back)
+    double[] botpose = LimelightHelpers.getBotpose(Constants.kLimelightName);
+    if (botpose != null && botpose.length >= 3) {
+        return botpose[2]; // Z component is front-to-back distance
+    }
+    
+    // Method 2: Use targetpose_robotspace which gives target position relative to robot
+    double[] targetpose_robotspace = LimelightHelpers.getTargetPose_RobotSpace(Constants.kLimelightName);
+    if (targetpose_robotspace != null && targetpose_robotspace.length >= 3) {
+        return targetpose_robotspace[2]; // Z component is front-to-back distance
+    }
+    
+    // Method 3: Use the camera-relative pose and transform it
+    Pose3d targetPose = LimelightHelpers.getTargetPose3d_CameraSpace(Constants.kLimelightName);
+    if (targetPose != null) {
+        // Note: This is a simplification, and doesn't account for camera mounting position
+        return targetPose.getZ(); 
+    }
+    
+    // Fallback method using target area
+    // This is very approximate and should only be used if all other methods fail
+    double targetArea = getTargetArea();
+    if (targetArea > 0.1) {
+        return 5.0 / Math.sqrt(targetArea);
+    }
+    
+    return -9999; // Couldn't determine distance
+}
+
+/**
+ * Checks if we're at the correct front-to-back distance for interaction
+ * with the AprilTag (e.g., picking up a game piece)
+ * 
+ * @return true if at the proper distance within tolerance
+ */
+public boolean isAtCorrectFrontToBackDistance() {
+    double distance = getFrontToBackDistance();
+    if (distance == -9999) {
+        return false; // No valid target
+    }
+    
+    return Math.abs(distance - TARGET_DISTANCE) < DISTANCE_THRESHOLD;
+}
+
+/**
+ * Updates the isReadyToGrab method to use front-to-back distance
+ */
+public boolean isReadyToGrab() {
+    return isAligned() && isAtCorrectFrontToBackDistance();
+}
+
     /**
      * Updates the robot's odometry using AprilTag vision data
      */

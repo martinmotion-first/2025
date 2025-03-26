@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -76,10 +77,21 @@ public class AprilTagCommands {
             double rotationSpeed = alignmentController.calculate(horizontalOffset, 0);
             rotationSpeed = MathUtil.clamp(rotationSpeed, -MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
             
-            // Calculate approach speed
-            double distance = vision.getEstimatedDistance();
-            double targetDistance = 0.5; // target distance in meters
-            double driveSpeed = distanceController.calculate(distance, targetDistance);
+            // Calculate approach speed using front-to-back distance
+            double frontToBackDistance = vision.getFrontToBackDistance();
+            double driveSpeed = 0;
+            
+            // if (frontToBackDistance != -9999) {
+            //     // Use the front-to-back distance for approach
+            //     driveSpeed = distanceController.calculate(frontToBackDistance, Constants.AprilTag.TARGET_DISTANCE);
+            //     driveSpeed = MathUtil.clamp(driveSpeed, -MAX_DRIVE_SPEED, MAX_DRIVE_SPEED);
+            // } else {
+            //     // Fallback to old method if front-to-back distance isn't available
+            //     double distance = vision.getEstimatedDistance();
+            //     driveSpeed = distanceController.calculate(distance, Constants.AprilTag.TARGET_DISTANCE);
+            //     driveSpeed = MathUtil.clamp(driveSpeed, -MAX_DRIVE_SPEED, MAX_DRIVE_SPEED);
+            // }
+            driveSpeed = -distanceController.calculate(frontToBackDistance, Constants.AprilTag.TARGET_DISTANCE);
             driveSpeed = MathUtil.clamp(driveSpeed, -MAX_DRIVE_SPEED, MAX_DRIVE_SPEED);
             
             // Use field-centric drive with the calculated speeds
@@ -95,10 +107,15 @@ public class AprilTagCommands {
             
             // Debug info
             SmartDashboard.putNumber("Alignment Error", horizontalOffset);
-            SmartDashboard.putNumber("Distance Error", distance - targetDistance);
+            SmartDashboard.putNumber("Front-to-Back Distance", frontToBackDistance);
+            SmartDashboard.putNumber("Target Distance", Constants.AprilTag.TARGET_DISTANCE);
+            SmartDashboard.putNumber("Distance Error", 
+                frontToBackDistance != -9999 ? frontToBackDistance - Constants.AprilTag.TARGET_DISTANCE : 
+                vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE);
             SmartDashboard.putNumber("Drive Speed", driveSpeed);
             SmartDashboard.putNumber("Rotation Speed", rotationSpeed);
         }
+
         
         @Override
         public boolean isFinished() {
