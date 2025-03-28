@@ -40,7 +40,7 @@ import edu.wpi.first.math.util.Units;
       public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
     //new CTRE P6 constants
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaxAngularRate = RotationsPerSecond.of(0.7).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
   }
 
   public static final class Elevator {
@@ -56,20 +56,20 @@ import edu.wpi.first.math.util.Units;
             // L3(0.70),
             // L4(1.27),
             // TOP(1.57);
-            BOTTOM(-0.001),
+            BOTTOM(0.002508),
             // ARM_FREE(-0.085),
             ARM_FREE(-0.143952),
             INTAKE_PREP(-.154),
             INTAKE(-.063),
             ALGAE_L2(-.308),
-            ALGAE_L3(-.56),
-            ALGAE_L2ALT(-.56), //HERE! NEEDS OFFICIAL NUMBERS, JUST A PLACEHOLDER
-            ALGAE_L3ALT(-.81), //HERE! NEEDS OFFICIAL NUMBERS, JUST A PLACEHOLDER
+            ALGAE_L3(-.622),
+            ALGAE_L2ALT(-.56), 
+            ALGAE_L3ALT(-.81), 
 
             L1(-.047),
             L2(-.058), //altering for measurements
-            L3(-.3915), //altering for measurements
-            L4(-.49),
+            L3(-0.362), //altering for measurements
+            L4(-0.796513),
             TOP(-.81);
 
             public final double value;
@@ -111,7 +111,7 @@ import edu.wpi.first.math.util.Units;
         public static final double TOLERANCE = 0.02;
 
         public static final double MAX_VELOCITY_METERS_PER_SECOND = 1; // TODO HERE!!! (tuning way down for intial attempt (from 1.3))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1; // TODO HERE!!! (tuning way down for intial attempt (from 3))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1.75; // TODO HERE!!! (tuning way down for intial attempt (from 3))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
@@ -135,13 +135,13 @@ import edu.wpi.first.math.util.Units;
             // TOP(3.379);
 
             BOTTOM(-.01),
-            ALGAE(.4),
+            ALGAE(1.53),
             HORIZONTAL(1.3),
             L1(1.3),
-            L2(2.2), //alterting fro actual reef
-            L3(2.2), //altering for actual reef
-            L4(2.4),//bumping down for now since we're not actually trying it
-            TOP(2.4); //bumping down for now since we're not actually trying it
+            L2(2.327102), //altering for actual reef
+            L3(2.327102), //altering for actual reef
+            L4(2.529890),
+            TOP(2.529890); 
 
             public final double value;
 
@@ -169,7 +169,7 @@ import edu.wpi.first.math.util.Units;
 
         public static final int CURRENT_LIMIT = 50;
 
-        public static final double kP = 13; // TODO
+        public static final double kP = 30; // TODO
         public static final double kI = 0; // TODO
         public static final double kD = 0; // TODO
         public static final double kS = 0.017964; // TODO
@@ -178,8 +178,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 0.206676;// TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 2.5; // TODO HERE!!! (tuning way down for intial attempt (from 8))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2.5; // TODO HERE!!! (tuning way down for intial attempt (from 4))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 3; // TODO HERE!!! (tuning way down for intial attempt (from 8))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3; // TODO HERE!!! (tuning way down for intial attempt (from 4))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
@@ -187,7 +187,10 @@ import edu.wpi.first.math.util.Units;
     public static final class Intake {
         public static final int MOTOR_ID = 6;
         public static final boolean MOTOR_INVERTED = true;
-        public static final int CURRENT_LIMIT = 40; //dropping down to 60;
+        public static final int CURRENT_LIMIT = 40; 
+
+        public static final double FORWARD_VOLTAGE = 6;
+        public static final double REVERSE_VOLTAGE = -10;
     }
 
     public static final class Climber {
@@ -196,7 +199,7 @@ import edu.wpi.first.math.util.Units;
         public static final int CURRENT_LIMIT = 60;
 
         public static final double MIN_POSITION_METERS = 0.0;
-        public static final double MAX_POSITION_METERS = 0.1; // TODO HERE!!! (tuning way down for intial attempt (from 1.0))
+        public static final double MAX_POSITION_METERS = 0.2; // TODO HERE!!! (tuning way down for intial attempt (from 1.0))
 
         public static final double GEARING = 80.0; //changing from 64.0
         public static final double MASS_KG = Units.lbsToKilograms(80); // robot weight
