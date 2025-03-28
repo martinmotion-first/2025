@@ -68,7 +68,7 @@ import edu.wpi.first.math.util.Units;
 
             L1(-.047),
             L2(-.058), //altering for measurements
-            L3(-.3915), //altering for measurements
+            L3(-0.362), //altering for measurements
             L4(-0.796513),
             TOP(-.81);
 
@@ -138,8 +138,8 @@ import edu.wpi.first.math.util.Units;
             ALGAE(1.53),
             HORIZONTAL(1.3),
             L1(1.3),
-            L2(2.440131), //alterting fro actual reef
-            L3(2.440131), //altering for actual reef
+            L2(2.327102), //altering for actual reef
+            L3(2.327102), //altering for actual reef
             L4(2.529890),
             TOP(2.529890); 
 
@@ -178,8 +178,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 0.206676;// TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 3; // TODO HERE!!! (tuning way down for intial attempt (from 8))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3; // TODO HERE!!! (tuning way down for intial attempt (from 4))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 2; // TODO HERE!!! (tuning way down for intial attempt (from 8))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2; // TODO HERE!!! (tuning way down for intial attempt (from 4))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
