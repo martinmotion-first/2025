@@ -115,8 +115,8 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
 
         positionTracker.setArmAngleSupplier(this::getPosition);
 
-        // setDefaultCommand(moveToCurrentGoalCommand());
-        setDefaultCommand(holdCurrentPositionCommand());
+
+        // setDefaultCommand(holdCurrentPositionCommand());
         resetPosition();
     }
 
@@ -199,7 +199,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
             setVoltage(feedbackVoltage + feedforwardVoltage);
         }).withName("arm.moveToCurrentGoal");
     }
-
+ 
     @Override
     public Command moveToPositionCommand(Supplier<ArmPosition> goalPositionSupplier) {
         return Commands.sequence(
@@ -207,7 +207,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 runOnce(() -> pidController.setGoal(goalPositionSupplier.get().value)),
                 moveToCurrentGoalCommand()
                         .until(() -> pidController.atGoal()))
-                .andThen(holdCurrentPositionCommand())
+                // .andThen(holdCurrentPositionCommand())
                 // .withTimeout(3)
                 .withName("arm.moveToPosition");
     }
