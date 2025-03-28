@@ -63,8 +63,8 @@ import edu.wpi.first.math.util.Units;
             INTAKE(-.063),
             ALGAE_L2(-.308),
             ALGAE_L3(-.622),
-            ALGAE_L2ALT(-.56), //HERE! NEEDS OFFICIAL NUMBERS, JUST A PLACEHOLDER
-            ALGAE_L3ALT(-.81), //HERE! NEEDS OFFICIAL NUMBERS, JUST A PLACEHOLDER
+            ALGAE_L2ALT(-.56), 
+            ALGAE_L3ALT(-.81), 
 
             L1(-.047),
             L2(-.058), //altering for measurements
