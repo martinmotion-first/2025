@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.limelightlib.LimelightHelpers;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
@@ -35,21 +36,21 @@ public class AprilTagCommands {
         private final CommandSwerveDrivetrain drivetrain;
         private final LimelightVisionSubsystem vision;
         
-        private static final double MAX_DRIVE_SPEED = 0.5; // m/s
-        private static final double MAX_ROTATION_SPEED = 1.0; // rad/s
+        private static final double MAX_DRIVE_SPEED = 1.0; // m/s
+        private static final double MAX_ROTATION_SPEED = .5; // rad/s
         
-        private final PIDController alignmentController = new PIDController(0.03, 0, 0.001);
-        private final PIDController distanceController = new PIDController(1.0, 0, 0.05);
+        private final PIDController alignmentController = new PIDController(.5, 0, 0.001);
+        private final PIDController distanceController = new PIDController(1, 0, 0.05);
         
-        private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+        private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
         
         public ApproachAprilTagCommand(CommandSwerveDrivetrain drivetrain, LimelightVisionSubsystem vision) {
             this.drivetrain = drivetrain;
             this.vision = vision;
             
-            alignmentController.setTolerance(2.0); // 2 degrees tolerance
-            distanceController.setTolerance(0.05); // 5cm tolerance
+            alignmentController.setTolerance(Constants.AprilTag.ALIGNMENT_THRESHOLD); // 5 degrees tolerance
+            distanceController.setTolerance(Constants.AprilTag.DISTANCE_THRESHOLD); // 10cm tolerance
             
             addRequirements(drivetrain, vision);
         }
@@ -83,15 +84,17 @@ public class AprilTagCommands {
             
             // if (frontToBackDistance != -9999) {
             //     // Use the front-to-back distance for approach
-            //     driveSpeed = distanceController.calculate(frontToBackDistance, Constants.AprilTag.TARGET_DISTANCE);
+            //     driveSpeed = distanceController.calculate(-frontToBackDistance, Constants.AprilTag.TARGET_DISTANCE);
             //     driveSpeed = MathUtil.clamp(driveSpeed, -MAX_DRIVE_SPEED, MAX_DRIVE_SPEED);
             // } else {
             //     // Fallback to old method if front-to-back distance isn't available
             //     double distance = vision.getEstimatedDistance();
-            //     driveSpeed = distanceController.calculate(distance, Constants.AprilTag.TARGET_DISTANCE);
+            //     driveSpeed = distanceController.calculate(-distance, Constants.AprilTag.TARGET_DISTANCE);
             //     driveSpeed = MathUtil.clamp(driveSpeed, -MAX_DRIVE_SPEED, MAX_DRIVE_SPEED);
             // }
-            driveSpeed = -distanceController.calculate(frontToBackDistance, Constants.AprilTag.TARGET_DISTANCE);
+
+            double distance = vision.getEstimatedDistance();
+            driveSpeed = distanceController.calculate(-distance, Constants.AprilTag.TARGET_DISTANCE);
             driveSpeed = MathUtil.clamp(driveSpeed, -MAX_DRIVE_SPEED, MAX_DRIVE_SPEED);
             
             // Use field-centric drive with the calculated speeds
@@ -99,21 +102,47 @@ public class AprilTagCommands {
             Rotation2d robotAngle = drivetrain.getState().Pose.getRotation();
             double xSpeed = driveSpeed * robotAngle.getCos();
             double ySpeed = driveSpeed * robotAngle.getSin();
-            
-            drivetrain.setControl(drive
-                .withVelocityX(xSpeed)
-                .withVelocityY(ySpeed)
-                .withRotationalRate(rotationSpeed));
+
+            //keep the signs of the distance error in the final speeds
+            if(vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE < 0 && xSpeed >= 0){ //if distance error is negative, make the speeds negative
+                xSpeed = xSpeed * -1;
+            }else if(vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE > 0 && xSpeed <= 0){
+                xSpeed = xSpeed * -1;
+            }
+
+            if(vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE < 0 && ySpeed >= 0){ //if distance error is negative, make the speeds negative
+                ySpeed = ySpeed * -1;
+            }else if(vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE > 0 && ySpeed <= 0){
+                ySpeed = ySpeed * -1;
+            }
+
+            if(!distanceController.atSetpoint()){                
+                drivetrain.setControl(drive
+                    .withVelocityX(xSpeed)
+                    .withVelocityY(ySpeed)
+                    .withRotationalRate(rotationSpeed));
+            }else if(!alignmentController.atSetpoint()){
+                drivetrain.setControl(drive
+                    .withVelocityX(0)
+                    .withVelocityY(0)
+                    .withRotationalRate(rotationSpeed));
+            }
             
             // Debug info
             SmartDashboard.putNumber("Alignment Error", horizontalOffset);
             SmartDashboard.putNumber("Front-to-Back Distance", frontToBackDistance);
             SmartDashboard.putNumber("Target Distance", Constants.AprilTag.TARGET_DISTANCE);
-            SmartDashboard.putNumber("Distance Error", 
-                frontToBackDistance != -9999 ? frontToBackDistance - Constants.AprilTag.TARGET_DISTANCE : 
-                vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE);
+            SmartDashboard.putNumber("Distance Error", vision.getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE);
+            SmartDashboard.putNumber("Drive Speed (X)", driveSpeed);
+            SmartDashboard.putNumber("Drive Speed (Y)", driveSpeed);
             SmartDashboard.putNumber("Drive Speed", driveSpeed);
             SmartDashboard.putNumber("Rotation Speed", rotationSpeed);
+            SmartDashboard.putNumber("Robot angle", robotAngle.getDegrees());
+            // SmartDashboard.putNumber("Robot yaw", vision.getYaw());
+            // SmartDashboard.putNumber("Robot Tx", LimelightHelpers.getTX(Constants.kLimelightName));
+            // SmartDashboard.putNumber("Target Pose yaw", LimelightHelpers.getTargetPose_RobotSpace(Constants.kLimelightName)[5]);
+            // SmartDashboard.putNumber("Target Pose ?1", LimelightHelpers.getTargetPose_RobotSpace(Constants.kLimelightName)[4]);
+            // SmartDashboard.putNumber("Target Pose ?2", LimelightHelpers.getTargetPose_RobotSpace(Constants.kLimelightName)[3]);
         }
 
         

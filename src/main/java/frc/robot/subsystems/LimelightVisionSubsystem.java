@@ -14,9 +14,8 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain;
     
     // Constants for AprilTag alignment
-    private static final double TARGET_DISTANCE = 0.5; // meters - distance to target for grabbing
-    private static final double ALIGNMENT_THRESHOLD = 2.0; // degrees
-    private static final double DISTANCE_THRESHOLD = 0.1; // meters
+    // public static final double ALIGNMENT_THRESHOLD = 2.0; // degrees
+    // public static final double DISTANCE_THRESHOLD = 0.3; // meters
     
     public LimelightVisionSubsystem(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
@@ -95,14 +94,14 @@ public class LimelightVisionSubsystem extends SubsystemBase {
      * Check if the robot is aligned with the AprilTag
      */
     public boolean isAligned() {
-        return hasTarget() && Math.abs(getHorizontalOffset()) < ALIGNMENT_THRESHOLD;
+        return hasTarget() && Math.abs(getHorizontalOffset()) < Constants.AprilTag.ALIGNMENT_THRESHOLD;
     }
     
     /**
      * Check if the robot is at the right distance to grab
      */
     public boolean isAtGrabbingDistance() {
-        return hasTarget() && Math.abs(getEstimatedDistance() - TARGET_DISTANCE) < DISTANCE_THRESHOLD;
+        return hasTarget() && Math.abs(getEstimatedDistance() - Constants.AprilTag.TARGET_DISTANCE) < Constants.AprilTag.DISTANCE_THRESHOLD;
     }
 
     /**
@@ -118,7 +117,7 @@ public double getFrontToBackDistance() {
     }
     
     // Method 1: Direct access to botpose array (most reliable for front-to-back)
-    double[] botpose = LimelightHelpers.getBotpose(Constants.kLimelightName);
+    double[] botpose = LimelightHelpers.getBotPose(Constants.kLimelightName);
     if (botpose != null && botpose.length >= 3) {
         return botpose[2]; // Z component is front-to-back distance
     }
@@ -146,6 +145,17 @@ public double getFrontToBackDistance() {
     return -9999; // Couldn't determine distance
 }
 
+public double getYaw(){
+    if (!hasTarget()) {
+        return -9999; // No valid target detected
+    }
+    double[] botpose = LimelightHelpers.getBotPose(Constants.kLimelightName);
+    if (botpose != null && botpose.length >= 5) {
+        return botpose[5]; 
+    }
+    return -9999;
+}
+
 /**
  * Checks if we're at the correct front-to-back distance for interaction
  * with the AprilTag (e.g., picking up a game piece)
@@ -158,7 +168,7 @@ public boolean isAtCorrectFrontToBackDistance() {
         return false; // No valid target
     }
     
-    return Math.abs(distance - TARGET_DISTANCE) < DISTANCE_THRESHOLD;
+    return Math.abs(distance - Constants.AprilTag.TARGET_DISTANCE) < Constants.AprilTag.DISTANCE_THRESHOLD;
 }
 
 /**

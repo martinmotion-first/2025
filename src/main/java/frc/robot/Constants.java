@@ -264,8 +264,9 @@ import edu.wpi.first.math.util.Units;
         public static final int LOADING_APRILTAG_ID = 4; // Update with actual ID
         
         // Approach parameters
-        public static final double TARGET_DISTANCE = 0.5; // meters
+        public static final double TARGET_DISTANCE = 0.1; // meters
         public static final double ALIGNMENT_THRESHOLD = 2.0; // degrees
+        public static final double DISTANCE_THRESHOLD = 0.2;
         
         // PID constants for approach
         public static final double APPROACH_P = 0.03;
