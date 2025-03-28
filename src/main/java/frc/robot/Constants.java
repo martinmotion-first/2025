@@ -178,8 +178,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 0.206676;// TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 2; // TODO HERE!!! (tuning way down for intial attempt (from 8))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2; // TODO HERE!!! (tuning way down for intial attempt (from 4))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 3; // TODO HERE!!! (tuning way down for intial attempt (from 8))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3; // TODO HERE!!! (tuning way down for intial attempt (from 4))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
