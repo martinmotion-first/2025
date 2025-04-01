@@ -157,6 +157,12 @@ public class RobotContainer {
   public double getArmPosition(){
     return arm.getPosition();
   }
+  public double getArmPositionAlternate(){
+    return arm.getPositionFromAlternate();
+  }
+  public double getArmPositionAbsolute(){
+    return arm.getPositionFromAbsolute();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

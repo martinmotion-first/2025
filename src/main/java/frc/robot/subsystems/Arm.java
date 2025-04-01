@@ -91,7 +91,7 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(CURRENT_LIMIT);
         motorConfig.encoder
-                .positionConversionFactor(ENCODER_ROTATIONS_TO_METERS)
+                // .positionConversionFactor(ENCODER_ROTATIONS_TO_METERS)
                 .velocityConversionFactor(ENCODER_ROTATIONS_TO_METERS / 60.0);
 
         motor = new SparkMax(MOTOR_ID, MotorType.kBrushless);
@@ -148,11 +148,19 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
 
     @Override
     public double getPosition() {
-        return motor.getEncoder().getPosition();
+        return motor.getAbsoluteEncoder().getPosition();
+    }
+
+    public double getPositionFromAbsolute(){
+        return motor.getAbsoluteEncoder() != null ? motor.getAbsoluteEncoder().getPosition() : -1.0;
+    }
+
+    public double getPositionFromAlternate(){
+        return motor.getAlternateEncoder() != null ? motor.getAlternateEncoder().getPosition() : -1.0;
     }
 
     public double getVelocity() {
-        return motor.getEncoder().getVelocity();
+        return motor.getAbsoluteEncoder().getVelocity();
     }
 
     @Override

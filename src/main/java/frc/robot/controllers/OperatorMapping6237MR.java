@@ -23,16 +23,16 @@ public class OperatorMapping6237MR {
 
         // controller.back().whileTrue(RobotCommands.kill(elevator, arm, intake, climber));
 
-        // controller.leftBumper().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L2));       // Left Stick Left (Negative Y-Axis)
-        // controller.rightBumper().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L3));   // Left Stick Right (Positive Y-Axis)
+        controller.leftBumper().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L2));       // Left Stick Left (Negative Y-Axis)
+        controller.rightBumper().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ALGAE_L3));   // Left Stick Right (Positive Y-Axis)
         controller.axisLessThan(1, -0.2).whileTrue(intake.reverseRollersCommand());//.onFalse(intake.stopRollersCommand())       //Left Stick Up
         controller.axisGreaterThan(1, 0.2).onTrue(RobotCommands.intakeCoralCommand(elevator, arm, coralSim));       //Left Stick Up
 
         controller.start().onTrue(RobotCommands.scoreCoralCommand(drivetrain, elevator, arm, coralSim));
-        // controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP)); 
-        // controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));  
-        // controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
-        // controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
+        controller.y().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.TOP)); 
+        controller.x().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L3));  
+        controller.b().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.L2));
+        controller.a().onTrue(RobotCommands.elevatorCombinedCommand(elevator, arm, ElevatorPosition.ARM_FREE));
 
         controller.povDown().whileTrue(RobotCommands.armOnlyGiveNegativeVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));
         controller.povUp().whileTrue(RobotCommands.armOnlyGivePositiveVoltage(arm)).onFalse(RobotCommands.armOnlyGiveZeroVoltage(arm));

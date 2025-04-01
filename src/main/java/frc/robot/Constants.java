@@ -134,14 +134,23 @@ import edu.wpi.first.math.util.Units;
             // L4(3.15),
             // TOP(3.379);
 
-            BOTTOM(-.01),
-            ALGAE(1.53),
-            HORIZONTAL(1.3),
-            L1(1.3),
-            L2(2.327102), //altering for actual reef
-            L3(2.327102), //altering for actual reef
-            L4(2.529890),
-            TOP(2.529890); 
+            // BOTTOM(-.01),
+            // ALGAE(1.53),
+            // HORIZONTAL(1.3),
+            // L1(1.3),
+            // L2(2.327102), 
+            // L3(2.327102), 
+            // L4(2.529890),
+            // TOP(2.529890); 
+
+            BOTTOM(0.999),
+            ALGAE(.75),
+            HORIZONTAL(.75),
+            L1(.8),
+            L2(.65), 
+            L3(.65), 
+            L4(.57),
+            TOP(.6); 
 
             public final double value;
 
@@ -169,7 +178,7 @@ import edu.wpi.first.math.util.Units;
 
         public static final int CURRENT_LIMIT = 50;
 
-        public static final double kP = 30; // TODO
+        public static final double kP = 10; // TODO //(should be 30)
         public static final double kI = 0; // TODO
         public static final double kD = 0; // TODO
         public static final double kS = 0.017964; // TODO
@@ -178,8 +187,8 @@ import edu.wpi.first.math.util.Units;
         public static final double kA = 0.206676;// TODO
         public static final double TOLERANCE = 0.02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 3; // TODO HERE!!! (tuning way down for intial attempt (from 8))
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3; // TODO HERE!!! (tuning way down for intial attempt (from 4))
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 1; // TODO HERE!!! (tuning way down for intial attempt (from 8))
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1; // TODO HERE!!! (tuning way down for intial attempt (from 4))
         public static final TrapezoidProfile.Constraints MOVEMENT_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_VELOCITY_METERS_PER_SECOND, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
