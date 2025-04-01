@@ -90,9 +90,9 @@ public class Arm extends SubsystemBase implements BaseSingleJointedArm<ArmPositi
                 .inverted(MOTOR_INVERTED)
                 .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(CURRENT_LIMIT);
-        motorConfig.encoder
-                // .positionConversionFactor(ENCODER_ROTATIONS_TO_METERS)
-                .velocityConversionFactor(ENCODER_ROTATIONS_TO_METERS / 60.0);
+        motorConfig.absoluteEncoder
+                .positionConversionFactor(.5)
+                .velocityConversionFactor(.5 / 60.0);
 
         motor = new SparkMax(MOTOR_ID, MotorType.kBrushless);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -143,14 +143,14 @@ import edu.wpi.first.math.util.Units;
             // L4(2.529890),
             // TOP(2.529890); 
 
-            BOTTOM(0.999),
-            ALGAE(.75),
-            HORIZONTAL(.75),
-            L1(.8),
-            L2(.65), 
-            L3(.65), 
-            L4(.57),
-            TOP(.6); 
+            BOTTOM(0.4995),
+            ALGAE(.375),
+            HORIZONTAL(.375),
+            L1(.375),
+            L2(.287), 
+            L3(.287), 
+            L4(.27),
+            TOP(.268); 
 
             public final double value;
 
