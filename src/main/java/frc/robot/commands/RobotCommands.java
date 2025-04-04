@@ -182,29 +182,25 @@ public class RobotCommands {
             armPosition = ArmPosition.BOTTOM;
         }
 
-        // if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
-        //                                                                 elevatorPosition == ElevatorPosition.L2) 
-        //                                                              && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
-        //     return Commands.sequence(
-        //         Commands.parallel(
-        //             elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
-        //             Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
-        //         ),
-        //         Commands.parallel(
-        //             arm.moveToPositionCommandAlternate(armPosition).asProxy(),
-        //             Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
-        //         )  
-        //     );
-        // }else{
-        //     return Commands.parallel(
-        //         elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-        //         arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        //     );
-        // }
-        return Commands.parallel(
-            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-            arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        );
+        if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
+                                                                        elevatorPosition == ElevatorPosition.L2) 
+                                                                     && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
+            return Commands.sequence(
+                Commands.parallel(
+                    elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
+                    Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
+                ),
+                Commands.parallel(
+                    arm.moveToPositionCommandAlternate(armPosition).asProxy(),
+                    Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
+                )  
+            );
+        }else{
+            return Commands.parallel(
+                elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+                arm.moveToPositionCommandAlternate(armPosition).asProxy()
+            );
+        }
 
     }
 
