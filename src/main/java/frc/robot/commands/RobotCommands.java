@@ -218,10 +218,11 @@ public class RobotCommands {
         ArmPosition armPosition = ArmPosition.L2;
         ElevatorPosition elevatorPosition = ElevatorPosition.L2;
         
-        return Commands.parallel(
-            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-            arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        ).raceWith(new WaitCommand(3));
+        // return Commands.parallel(
+        //     elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+        //     arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        // ).raceWith(new WaitCommand(3));
+        return RobotCommands.elevatorCombinedCommand(elevator, arm, elevatorPosition).raceWith(new WaitCommand(3));
     }
 
     public static Command elevatorCombinedCommandAutoL3(Elevator elevator, Arm arm) {
