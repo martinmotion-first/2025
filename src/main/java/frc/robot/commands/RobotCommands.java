@@ -182,29 +182,25 @@ public class RobotCommands {
             armPosition = ArmPosition.BOTTOM;
         }
 
-        // if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
-        //                                                                 elevatorPosition == ElevatorPosition.L2) 
-        //                                                              && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
-        //     return Commands.sequence(
-        //         Commands.parallel(
-        //             elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
-        //             Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
-        //         ),
-        //         Commands.parallel(
-        //             arm.moveToPositionCommandAlternate(armPosition).asProxy(),
-        //             Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
-        //         )  
-        //     );
-        // }else{
-        //     return Commands.parallel(
-        //         elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-        //         arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        //     );
-        // }
-        return Commands.parallel(
-            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-            arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        );
+        if(elevator.getPosition() >= ElevatorPosition.ARM_FREE.value && (elevatorPosition == ElevatorPosition.BOTTOM || 
+                                                                        elevatorPosition == ElevatorPosition.L2) 
+                                                                     && arm.getPosition() <= Constants.kArmPositionSafeLowerLimit){ //negative voltage is up on our (inverted) motor
+            return Commands.sequence(
+                Commands.parallel(
+                    elevator.moveToPositionCommand(() -> ElevatorPosition.ARM_FREE).asProxy(),
+                    Commands.waitSeconds(Constants.kSafeElevatorInitialDelay)
+                ),
+                Commands.parallel(
+                    arm.moveToPositionCommandAlternate(armPosition).asProxy(),
+                    Commands.waitSeconds(Constants.kSafeElevatorWaitTime).andThen(elevator.moveToPositionCommand(() -> elevatorPosition).asProxy())
+                )  
+            );
+        }else{
+            return Commands.parallel(
+                elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+                arm.moveToPositionCommandAlternate(armPosition).asProxy()
+            );
+        }
 
     }
 
@@ -222,10 +218,11 @@ public class RobotCommands {
         ArmPosition armPosition = ArmPosition.L2;
         ElevatorPosition elevatorPosition = ElevatorPosition.L2;
         
-        return Commands.parallel(
-            elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
-            arm.moveToPositionCommandAlternate(armPosition).asProxy()
-        ).raceWith(new WaitCommand(3));
+        // return Commands.parallel(
+        //     elevator.moveToPositionCommand(() -> elevatorPosition).asProxy(),
+        //     arm.moveToPositionCommandAlternate(armPosition).asProxy()
+        // ).raceWith(new WaitCommand(3));
+        return RobotCommands.elevatorCombinedCommand(elevator, arm, elevatorPosition).raceWith(new WaitCommand(3));
     }
 
     public static Command elevatorCombinedCommandAutoL3(Elevator elevator, Arm arm) {
